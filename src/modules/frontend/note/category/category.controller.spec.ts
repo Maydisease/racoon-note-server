@@ -47,7 +47,7 @@ describe('CategoryController', () => {
                 count : 0
             };
 
-            const response: any = await categoryController.addCategoryData(body);
+            const response: any = await categoryController.addCategoryData(body, {});
             expect(response.messageCode).toBe(1100)
         });
 
@@ -64,7 +64,7 @@ describe('CategoryController', () => {
                 count : 0
             };
 
-            const response: any = await categoryController.addCategoryData(body);
+            const response: any = await categoryController.addCategoryData(body, {});
             expect(response.messageCode).toBe(1100)
         });
 
@@ -79,7 +79,7 @@ describe('CategoryController', () => {
                 count : 0
             };
 
-            const response: any = await categoryController.addCategoryData(body);
+            const response: any = await categoryController.addCategoryData(body, {});
             expect(response.messageCode).toBe(2000)
         });
 
@@ -94,7 +94,7 @@ describe('CategoryController', () => {
                 count : 0
             };
 
-            const response: any = await categoryController.addCategoryData(body);
+            const response: any = await categoryController.addCategoryData(body, {});
             expect(response.messageCode).toBe(1103)
         });
 
@@ -110,7 +110,7 @@ describe('CategoryController', () => {
                 uid    : 5
             };
 
-            const response: any = await categoryController.renameCategory(body);
+            const response: any = await categoryController.renameCategory(body, {});
             expect(response.messageCode).toBe(1100)
         });
 
@@ -123,7 +123,7 @@ describe('CategoryController', () => {
                 uid    : 5
             };
 
-            const response: any = await categoryController.renameCategory(body);
+            const response: any = await categoryController.renameCategory(body, {});
             expect(response.messageCode).toBe(1100)
         });
 
@@ -136,7 +136,7 @@ describe('CategoryController', () => {
                 uid    : 5
             };
 
-            const response: any = await categoryController.renameCategory(body);
+            const response: any = await categoryController.renameCategory(body, {});
             expect(response.messageCode).toBe(1104)
         });
     });
@@ -151,7 +151,7 @@ describe('CategoryController', () => {
                 uid    : 5
             };
 
-            const response: any = await categoryController.removeCategory(body);
+            const response: any = await categoryController.removeCategory(body, {});
             expect(response.messageCode).toBe(1105)
         });
     });
