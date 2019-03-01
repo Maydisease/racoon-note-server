@@ -22,6 +22,7 @@ const dbConf: ConfInterface = {
     database   : CONFIG.DB.DB_DATABASE,
     entities   : [CONFIG.PATH.BASIC + '/**/*.entity{.ts,.js}'],
     synchronize: true,
+    charset: 'utf8mb4',
     logging    : true
 };
 
