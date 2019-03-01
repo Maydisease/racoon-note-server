@@ -66,7 +66,7 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("name = :name", {name: name})
+                   .where("binary name = :name", {name: name})
                    .andWhere("uid = :uid", {uid: uid})
                    .andWhere("parent = :parent", {parent: parent})
                    .printSql()
