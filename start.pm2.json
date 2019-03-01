@@ -1,0 +1,17 @@
+{
+    "apps": {
+            "name": "note-server.wunao.net",
+            "script": "npm",
+            "args" : "run start:prod",
+            "exec_interpreter": "bash",
+            "min_uptime": "60s",
+            "max_restarts": 30,
+            "exec_mode": "cluster_mode",
+            "error_file": "./logs/err.log",
+            "out_file": "./logs/out.log",
+            "pid_file": "./logs/h5-service.pid",
+            "watch": false,
+            "mode": "cluster",
+            "instances": 4
+    }
+}
