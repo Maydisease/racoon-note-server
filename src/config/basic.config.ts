@@ -1,13 +1,31 @@
 import * as path from 'path';
 import * as fs   from 'fs';
 
+let privateKeyPath: string;
+let publicKeyPath: string;
+
+switch(process.env.APP_ENV){
+    case 'development': 
+        privateKeyPath = path.join(__dirname, '../../keys/note_key');
+        publicKeyPath = path.join(__dirname, '../../keys/note_key.pub');
+    break;
+    case 'production': 
+        privateKeyPath = path.join(__dirname, '../../../keys/note_key');
+        publicKeyPath = path.join(__dirname, '../../../keys/note_key.pub');
+    break;
+}
+
+const privateKey = fs.readFileSync(privateKeyPath);
+const publicKey = fs.readFileSync(publicKeyPath);
+
+
 export default {
     PATH: {
         BASIC: path.join(__dirname, '../../')
     },
     KEYS: {
-        PRIVATE: fs.readFileSync(path.join(__dirname, '../../keys/note_key')),
-        PUBLIC : fs.readFileSync(path.join(__dirname, '../../keys/note_key.pub'))
+        PRIVATE: privateKey,
+        PUBLIC :publicKey
     },
     ASE: {
       KEY: '9vApxLk5G3PAsJrM',

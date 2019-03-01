@@ -1,7 +1,20 @@
 import * as path   from 'path';
 import * as dotenv from 'dotenv';
 
-const testEnvConf = dotenv.config({path: path.join(__dirname, '../../env/test.env')}).parsed;
+let testEnvConfPath: string;
+
+switch(process.env.APP_ENV){
+    case 'development': 
+        testEnvConfPath = path.join(__dirname, '../../env/test.env');
+    break;
+    case 'production': 
+        testEnvConfPath = path.join(__dirname, '../../../env/test.env');
+    break;
+}
+
+const testEnvConf = dotenv.config({path: testEnvConfPath}).parsed;
+
+console.log(777, testEnvConf);
 
 export default {
     DB : {

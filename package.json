@@ -11,7 +11,7 @@
 		"start:dev": "nodemon",
 		"start:debug": "nodemon --config nodemon-debug.json",
 		"prestart:prod": "rimraf dist && tsc",
-		"start:prod": "node -r dotenv/config dist/src/main.js dotenv_config_path=../env/production.env",
+		"start:prod": "node -r dotenv/config dist/src/main.js dotenv_config_path=./env/production.env",
 		"lint": "tslint -p tsconfig.json -c tslint.json",
 		"test": "jest --verbose --forceExit --detectOpenHandles",
 		"test:watch": "jest --watch",
