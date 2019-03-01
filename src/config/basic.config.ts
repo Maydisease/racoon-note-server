@@ -18,7 +18,6 @@ switch(process.env.APP_ENV){
 const privateKey = fs.readFileSync(privateKeyPath);
 const publicKey = fs.readFileSync(publicKeyPath);
 
-
 export default {
     PATH: {
         BASIC: path.join(__dirname, '../../')
