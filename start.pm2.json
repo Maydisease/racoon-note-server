@@ -7,9 +7,9 @@
             "min_uptime": "60s",
             "max_restarts": 30,
             "exec_mode": "cluster_mode",
-            "error_file": "./logs/err.log",
-            "out_file": "./logs/out.log",
-            "pid_file": "./logs/h5-service.pid",
+            "error_file": "./logs/note-server.wunao.net-err.log",
+            "out_file": "./logs/note-server.wunao.net-out.log",
+            "pid_file": "./logs/note-server.wunao.net.pid",
             "watch": false,
             "mode": "cluster",
             "instances": 4
