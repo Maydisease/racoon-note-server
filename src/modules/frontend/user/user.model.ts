@@ -44,17 +44,7 @@ export class UserModel {
         );
     }
 
-    verifySignState(username: string, userId: string, password: string, inputTime: number, lastTime: number): Promise<number> {
-        console.log(lastTime);
-        console.log(this.connection
-                        .getRepository(this.tableUser)
-                        .createQueryBuilder()
-                        .where("username = :username", {username: username})
-                        .andWhere("userId = :userId", {userId: userId})
-                        .andWhere("password = :password", {password: password})
-                        .andWhere("inputTime = :inputTime", {inputTime: inputTime})
-                        .andWhere("lastTime = :lastTime", {lastTime: lastTime})
-                        .getCount().then((res)=> {console.log(res)}));
+    verifySignState(username: string, userId: string, password: string, inputTime: number): Promise<number> {
         return this.connection
                    .getRepository(this.tableUser)
                    .createQueryBuilder()
@@ -62,7 +52,6 @@ export class UserModel {
                    .andWhere("userId = :userId", {userId: userId})
                    .andWhere("password = :password", {password: password})
                    .andWhere("inputTime = :inputTime", {inputTime: inputTime})
-                   .andWhere("lastTime = :lastTime", {lastTime: lastTime})
                    .getCount();
     }
 

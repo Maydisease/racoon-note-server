@@ -135,7 +135,7 @@ export class UserController {
 
         // 用户存在
         if (typeof response === 'object' && response.length > 0) {
-            const getUserToken = this.toolsService.encodeUserToken(response[0].username, response[0].userId, params.password, response[0].inputTime, params.lastTime);
+            const getUserToken = this.toolsService.encodeUserToken(response[0].username, response[0].userId, params.password, response[0].inputTime);
             await this.userService.updateLastTime(response[0].userId, params.lastTime);
             const responseBody = Object.assign({
                 'token': getUserToken
@@ -167,11 +167,10 @@ export class UserController {
             username : String(userParams.username),
             userId   : String(userParams.userId),
             password : String(userParams.password),
-            inputTime: Number(userParams.inputTime),
-            lastTime : Number(userParams.lastTime)
+            inputTime: Number(userParams.inputTime)
         });
 
-        const response = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime, params.lastTime);
+        const response = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
 
         if (!response) {
             return this.echoService.fail(4000, "Invalid token");

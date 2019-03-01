@@ -44,13 +44,12 @@ export class UserLoginOAuthGuard implements CanActivate {
                     username : String(userParams.username),
                     userId   : String(userParams.userId),
                     password : String(userParams.password),
-                    inputTime: Number(userParams.inputTime),
-                    lastTime : Number(userParams.lastTime)
+                    inputTime: Number(userParams.inputTime)
                 });
 
                 context.switchToHttp().getRequest()['userInfo'] = params;
 
-                isLoginState = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime, params.lastTime);
+                isLoginState = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
 
             } catch (e) {
                 isLoginState = false;
