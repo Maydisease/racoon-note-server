@@ -1,6 +1,6 @@
 {
     "apps": {
-            "name": "note-server.wunao.net",
+            "name": "racoon-server",
             "script": "npm",
             "args" : "run start:prod",
             "exec_interpreter": "bash",
