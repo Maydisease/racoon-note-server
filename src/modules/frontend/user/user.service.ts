@@ -41,8 +41,8 @@ export class UserService {
     }
 
     // 验证用户登录状态
-    public async verifySignState(username: string, userId: string, password: string, inputTime: number, lastTime: number): Promise<boolean> {
-        return await new UserModel(this.connection).verifySignState(username, userId, password, inputTime, lastTime) > 0;
+    public async verifySignState(username: string, userId: string, password: string, inputTime: number): Promise<boolean> {
+        return await new UserModel(this.connection).verifySignState(username, userId, password, inputTime) > 0;
     }
 
     // 更新用户最后一次登录的时间
