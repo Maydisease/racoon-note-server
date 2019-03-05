@@ -138,7 +138,8 @@ export class UserController {
             const getUserToken = this.toolsService.encodeUserToken(response[0].username, response[0].userId, params.password, response[0].inputTime);
             await this.userService.updateLastTime(response[0].userId, params.lastTime);
             const responseBody = Object.assign({
-                'token': getUserToken
+                token: getUserToken,
+                private_space: this.toolsService.getMD5(response[0].userId)
             }, response[0]);
             return this.echoService.success(responseBody);
         } else {

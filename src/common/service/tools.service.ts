@@ -46,8 +46,8 @@ export class ToolsService {
 
     // 用户OAuthToken加密
     public encodeUserToken(username: string, userId: string, password: string, inputTime: number, lastTime: number): string {
-        const sourceStr = `${username}&${userId}&${password}&${inputTime}&${lastTime}`;
-        return this.aesEncrypt(sourceStr);
+        const sourceStr: string = `${username}&${userId}&${password}&${inputTime}&${lastTime}`;
+        return <string>this.aesEncrypt(sourceStr);
     }
 
     // 用户OAuthToken解密
