@@ -6,7 +6,9 @@ import {UserController}      from "./user/user.controller";
 import {CategoryService}     from "./note/category/category.service";
 import {CategoryController}  from "./note/category/category.controller";
 import {ArticleController}   from "./note/article/article.controller";
+import {AttachedController}  from "./attached/attached.controller";
 import {ArticleService}      from "./note/article/article.service";
+import {AttachedService}     from "./attached/attached.service";
 import {UserLoginOAuthGuard} from "../../guard/userLoginOAuth.guard";
 import {APP_GUARD}           from "@nestjs/core";
 
@@ -14,7 +16,8 @@ import {APP_GUARD}           from "@nestjs/core";
     controllers: [
         UserController,
         CategoryController,
-        ArticleController
+        ArticleController,
+        AttachedController
     ],
     providers: [
         {provide: APP_GUARD, useClass: UserLoginOAuthGuard},
@@ -23,6 +26,7 @@ import {APP_GUARD}           from "@nestjs/core";
         {provide: 'categoryService', useClass: CategoryService},
         {provide: 'userService', useClass: UserService},
         {provide: 'articleService', useClass: ArticleService},
+        {provide: 'attachedService', useClass: AttachedService}
     ]
 })
 

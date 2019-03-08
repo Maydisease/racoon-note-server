@@ -6,5 +6,5 @@ build
 dist
 
 logs
-
+attached
 package-lock.json

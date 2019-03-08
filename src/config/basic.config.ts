@@ -20,7 +20,8 @@ const publicKey = fs.readFileSync(publicKeyPath);
 
 export default {
     PATH: {
-        BASIC: path.join(__dirname, '../../')
+        BASIC   : path.join(__dirname, '../../'),
+        ATTACHED: path.join(__dirname, '../../attached')
     },
     KEYS: {
         PRIVATE: privateKey,

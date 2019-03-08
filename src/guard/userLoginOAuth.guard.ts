@@ -23,7 +23,7 @@ export class UserLoginOAuthGuard implements CanActivate {
         let isLoginState = false;
         const headers    = context.switchToHttp().getRequest().headers;
 
-        console.log(headers);
+        console.log(555, headers);
 
         if (this.onWhileList) {
 
