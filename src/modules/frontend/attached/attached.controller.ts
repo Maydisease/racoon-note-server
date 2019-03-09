@@ -7,6 +7,7 @@ import {AttachedService}                                    from './attached.ser
 
 @UseGuards()
 @Controller('attached')
+// todo
 export class AttachedController {
 
     public imageType: string[];
