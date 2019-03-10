@@ -95,8 +95,6 @@ export class CategoryController {
     @Post('renameCategory')
     public async renameCategory(@Body() body, @Request() req) {
 
-        console.log(body);
-
         // 格式化数据
         const timestamp                  = new Date().getTime();
         const params: renameCategoryBody = this.toolsService.filterInvalidParams({

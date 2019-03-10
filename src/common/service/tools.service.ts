@@ -64,8 +64,6 @@ export class ToolsService {
     // removeHtmlTag
     public removeHtmlTag(sourceStr: string): string {
 
-        console.log(90999, sourceStr);
-
         // 去除HTML tag
         sourceStr = sourceStr.replace(/<\/?[^>]*>/g, '');
         // 去除行尾空白

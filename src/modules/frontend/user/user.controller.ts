@@ -142,8 +142,6 @@ export class UserController {
                 private_space: this.toolsService.getMD5(response[0].userId)
             }, response[0]);
 
-            console.log(responseBody);
-
             return this.echoService.success(responseBody);
         } else {
             return this.echoService.fail(1004, "Username and password do not match");

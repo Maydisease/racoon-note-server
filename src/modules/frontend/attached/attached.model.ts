@@ -25,7 +25,6 @@ export class AttachedModel {
 
     // 查询附件
     getAttached(uid: string) {
-        console.log(789, uid);
         return this.connection.getRepository(this.tableAttached)
                    .createQueryBuilder()
                    .andWhere("uid = :uid", {uid: uid})

@@ -14,8 +14,6 @@ switch(process.env.APP_ENV){
 
 const testEnvConf = dotenv.config({path: testEnvConfPath}).parsed;
 
-console.log(777, testEnvConf);
-
 export default {
     DB : {
         DB_TYPE    : testEnvConf.DB_TYPE,

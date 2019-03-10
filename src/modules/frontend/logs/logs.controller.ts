@@ -11,7 +11,6 @@ export class LogsController {
     // 获取分类数据
     @Post('echo')
     async echoLogs(@Body() body) {
-        console.log(body);
         return this.echoService.success();
     }
 
