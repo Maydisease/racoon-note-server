@@ -1,7 +1,7 @@
 import {Injectable}                from '@nestjs/common';
 import {Connection, getConnection} from 'typeorm';
 import {AttachedModel}             from "./attached.model";
-// todo
+
 @Injectable()
 export class AttachedService {
 
@@ -13,6 +13,10 @@ export class AttachedService {
 
     public getAttached(uid: string): Promise<object> {
         return new AttachedModel(this.connection).getAttached(uid)
+    }
+
+    public getAttachedType(id: number): Promise<object> {
+        return new AttachedModel(this.connection).getAttachedType(id);
     }
 
     public async addAttached(params: object): Promise<object> {

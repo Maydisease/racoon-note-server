@@ -7,7 +7,6 @@ import {AttachedService}                                    from './attached.ser
 
 @UseGuards()
 @Controller('attached')
-// todo
 export class AttachedController {
 
     public imageType: string[];
@@ -27,13 +26,13 @@ export class AttachedController {
 
         const timestamp: number     = new Date().getTime();
         const private_space         = this.toolsService.getMD5(req.userInfo.userId);
-        let attachedPath            = path.join(conf.PATH.ATTACHED, private_space);
+        let attachedPath            = path.join(conf.PATH.ATTACHED_FILES, private_space);
         let fileSaveDirPath: string = '';
         let fileSavePath: string    = '';
-        const randomFileName        = `${timestamp}`;
+        const randomFileName        = `${timestamp}${body.type}`;
         if (this.imageType.indexOf(body.type) >= 0) {
             fileSaveDirPath = path.join(attachedPath, 'img');
-            fileSavePath    = path.join(attachedPath, `img/${randomFileName}${body.type}`);
+            fileSavePath    = path.join(attachedPath, `img/${randomFileName}`);
         }
         const buffer: Buffer = new Buffer(body.buffer.data);
         if (!await getFilePathStat(fileSaveDirPath)) {
@@ -47,7 +46,7 @@ export class AttachedController {
             const params = this.toolsService.filterInvalidParams({
                 uid       : req.userInfo.userId,
                 name      : String(body.name),
-                path      : fileSavePath.replace(conf.PATH.BASIC, '/'),
+                path      : randomFileName,
                 type      : String(body.type),
                 size      : Number(body.size),
                 updateTime: timestamp,
@@ -74,8 +73,6 @@ export class AttachedController {
 
         const response = await this.attachedService.getAttached(params.uid);
 
-        console.log(666, response);
-
         // 判断数据是否正常取出了
         if (!response) {
             return this.echoService.fail(9001, "Data read failed");
@@ -87,15 +84,37 @@ export class AttachedController {
     @Post('removeAttached')
     async removeAttached(@Body() body, @Request() req) {
 
+        const private_space = this.toolsService.getMD5(req.userInfo.userId);
+        let attachedPath    = path.join(conf.PATH.ATTACHED_FILES, private_space);
+
         const params = this.toolsService.filterInvalidParams({
             ids: body.ids,
             uid: req.userInfo.userId,
         });
 
-        const response: any = await this.attachedService.removeAttached(params.ids, params.uid);
+        const getOneAttached: any = await this.attachedService.getAttachedType(params.ids);
+        const response: any       = await this.attachedService.removeAttached(params.ids, params.uid);
 
         if (response.raw.affectedRows > 0) {
-            return this.echoService.success(response);
+
+            let attachedType = '';
+
+            if (this.imageType.indexOf(getOneAttached.type) >= 0) {
+                attachedType = 'img';
+            }
+
+            const readyRemoveAttachedPath = path.resolve(attachedPath, attachedType, getOneAttached.path);
+            const attachedExists          = fs.existsSync(readyRemoveAttachedPath);
+            if (!attachedExists) {
+                return this.echoService.fail(1120, "attached does not exist");
+            }
+            const removeErr: any = fs.unlinkSync(readyRemoveAttachedPath);
+            if (!removeErr) {
+                return this.echoService.success(response);
+            } else {
+                return this.echoService.fail(1121, "remove attached failed");
+            }
+
         } else {
             return this.echoService.fail(9002, "Data remove failed");
         }

@@ -1,6 +1,6 @@
 import {_Attached}  from '../../../entities/attached.entity';
 import {Connection} from 'typeorm';
-// todo
+
 interface ArticleUpdateParams {
     title?: string,
     uid?: string,
@@ -20,7 +20,7 @@ export class AttachedModel {
     public tableAttached;
 
     constructor(private readonly connection: Connection) {
-        this.tableAttached  = _Attached;
+        this.tableAttached = _Attached;
     }
 
     // 查询附件
@@ -31,6 +31,14 @@ export class AttachedModel {
                    .andWhere("uid = :uid", {uid: uid})
                    .orderBy("id", "DESC")
                    .getMany();
+    }
+
+    // 获取附件类型
+    getAttachedType(id: number) {
+        return this.connection.getRepository(this.tableAttached)
+                   .createQueryBuilder()
+                   .andWhere("id = :id", {id: id})
+                   .getOne();
     }
 
     // 添加附件

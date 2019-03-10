@@ -10,6 +10,9 @@ async function bootstrap() {
     app.use(bodyParser.json({limit: '5mb'}));
     app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
     app.enableCors();
+    app.useStaticAssets(CONFIG.PATH.ATTACHED_FILES, {
+        prefix: '/attached_files/',
+    });
     app.useGlobalFilters(new HttpExceptionFilter());
     await app.listen(CONFIG.APP.APP_RUN_PORT);
 }
