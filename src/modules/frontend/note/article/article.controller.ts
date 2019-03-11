@@ -21,6 +21,7 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-textile';
 
 const markdownItMermaid = require('markdown-it-mermaid').default;
+const markdownItImsize  = require('markdown-it-imsize');
 
 declare var Prism: any;
 
@@ -75,17 +76,19 @@ export class ArticleController {
 
                 try {
                     language = lang;
-                    htmlStr = Prism.highlight(str, Prism.languages[language], language);
+                    htmlStr  = Prism.highlight(str, Prism.languages[language], language);
                 } catch (e) {
                     language = 'textile';
-                    htmlStr = Prism.highlight(str, Prism.languages[language], language);
+                    htmlStr  = Prism.highlight(str, Prism.languages[language], language);
                 }
 
                 html = `<pre class="language-${language}" language="${language}"><code>${htmlStr}</code></pre>`;
 
                 return html;
             }
-        }).use(markdownItMermaid);
+        })
+            .use(markdownItMermaid)
+            .use(markdownItImsize);
     }
 
     // 获取分类数据

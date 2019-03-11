@@ -43,6 +43,7 @@
 		"@types/supertest": "^2.0.5",
 		"crypto": "^1.0.1",
 		"jest": "^23.5.0",
+		"markdown-it-imsize": "^2.0.1",
 		"markdown-it-mermaid": "^0.2.5",
 		"mermaid": "^7.1.2",
 		"nodemon": "^1.18.3",
