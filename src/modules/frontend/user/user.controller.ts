@@ -82,9 +82,9 @@ export class UserController {
             inputTime : timestamp
         });
 
-        // 账号不符合规则
-        if (!(params.username && new RegExp(/^[a-zA-Z][0-9a-zA-Z]{5,11}$/).test(params.username))) {
-            return this.echoService.fail(1000, "Username should be 6-12 digits long, with underscore letters and numbers");
+        // 账号不符合邮箱规则
+        if (!(params.username && new RegExp(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(params.username))) {
+            return this.echoService.fail(1000, "please enter your vaild email");
         }
 
         // 密码不一致 or 不符合规则
