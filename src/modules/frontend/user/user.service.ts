@@ -50,6 +50,11 @@ export class UserService {
         return await new UserModel(this.connection).updateLastTime(userId, lastTime);
     }
 
+    // 更新用户密码
+    public async updateUserPassword(username: string, password: string, updateTime: number) {
+        return await new UserModel(this.connection).updateUserPassword(username, password, updateTime);
+    }
+
     public removeUserData() {
 
     }

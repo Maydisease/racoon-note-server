@@ -17,8 +17,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const request  = ctx.getRequest();
         const status   = exception.getStatus();
 
-        console.log(request.url, status);
-
         // 捕捉守卫抛出的错误
         if (status === 4000) {
             const errBody = this.echoService.fail(4000, 'Invalid token');

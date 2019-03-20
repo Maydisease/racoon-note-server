@@ -76,4 +76,26 @@ export class ToolsService {
         return sourceStr;
     }
 
+    public randomGenerator(digit: number, type: string | undefined = 'number') {
+
+        let randomCode   = '';
+        const letterMaps = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+        switch (type) {
+            case 'number':
+                for (let i = 0; i < digit; i++) {
+                    randomCode += Math.ceil(Math.random() * 9) + '';
+                }
+                break;
+            case 'string':
+                for (let i = 0; i < digit; i++) {
+                    const key = Math.ceil(Math.random() * 25);
+                    randomCode += letterMaps[key];
+                }
+                break;
+        }
+
+        return randomCode;
+    }
+
 }

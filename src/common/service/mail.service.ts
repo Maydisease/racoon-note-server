@@ -21,7 +21,7 @@ interface TransporterOptions {
 }
 
 @Injectable()
-export class UserService {
+export class MailService {
 
     public secret: string;
     public connection: Connection;
@@ -47,14 +47,12 @@ export class UserService {
             }
         };
 
-
         this.transporter = nodemailer.createTransport(this.transporterOptions);
 
     }
 
     public async send(mailOptions: MailOptions) {
         let info = await this.transporter.sendMail({...this.mailOptions, ...mailOptions});
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        return info;
     }
 }

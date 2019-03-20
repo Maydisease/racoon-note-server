@@ -64,11 +64,18 @@ export class UserModel {
                    .execute();
     }
 
-    updateUserData() {
+    updateUserPassword(username: string, password: string, updateTime: number) {
 
-    }
+        const setBody: any = {
+            password  : password,
+            updateTime: updateTime
+        };
 
-    removeUserData() {
-
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableUser)
+                   .set(setBody)
+                   .where("username = :username", {username: username})
+                   .execute();
     }
 }

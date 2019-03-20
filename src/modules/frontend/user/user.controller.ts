@@ -1,4 +1,5 @@
 import {Body, Controller, Headers, Inject, Post, UseGuards} from '@nestjs/common';
+import {storeService}                                       from "../../../common/service/store.service";
 
 interface addUserDataBody {
     username: string,
@@ -23,11 +24,15 @@ interface signInBody {
 @Controller('user')
 export class UserController {
 
+    public forgetPasswordCodeTimer: boolean;
+
     constructor(
         @Inject('toolsService') public toolsService,
         @Inject('userService') public userService,
-        @Inject('echoService') public echoService
+        @Inject('echoService') public echoService,
+        @Inject('mailService') public mailService
     ) {
+        this.forgetPasswordCodeTimer = false;
     }
 
     // 获取分类数据
@@ -182,10 +187,96 @@ export class UserController {
 
     }
 
+    @Post('changeUserPassword')
+    public async verifyForgetPasswordMailCode(@Body() body) {
+        const timestamp = new Date().getTime();
+        const params    = this.toolsService.filterInvalidParams({
+            username  : String(body.username),
+            verifycode: String(body.verifycode),
+            password  : String(body.password),
+            updateTime: timestamp
+        });
+
+        if (!(
+            storeService.storeList['forgetPasswordCode'] &&
+            storeService.storeList['forgetPasswordCode'][params.verifycode].expireDate > timestamp &&
+            storeService.storeList['forgetPasswordCode'][params.verifycode].username === params.username
+        )) {
+            storeService.remove('forgetPasswordCode', params.verifycode);
+            return this.echoService.fail(1202, "The verification code does not match the account number.");
+        }
+
+        storeService.remove('forgetPasswordCode', params.verifycode);
+
+        // 用户名不存在
+        if (!params.username || !await this.userService.verifyUserExist(params.username)) {
+            return this.echoService.fail(1003, "username does not exist");
+        }
+
+        // 密码不符合规则
+        if (!params.password || !(new RegExp(/^[0-9a-zA-Z]{6,16}$/).test(params.password))) {
+            return this.echoService.fail(1001, "Password does not match the rule");
+        }
+
+        params.password = this.toolsService.getMD5(params.password);
+        const response  = await this.userService.updateUserPassword(params.username, params.password, params.updateTime);
+
+        if (response && response.raw && response.raw.changedRows > 0) {
+            return this.echoService.success();
+        } else {
+            return this.echoService.fail(9001, "Data write failed");
+        }
+
+    }
+
     // 更新数据
-    @Post('updateUserData')
-    updateUserData() {
-        return 'updateUserData'
+    @Post('sendForgetPasswordVerifyMail')
+    public async sendForgetPasswordVerifyMail(@Body() body) {
+
+        const timestamp = new Date().getTime();
+        const params    = this.toolsService.filterInvalidParams({
+            username: String(body.username)
+        });
+
+        // if (this.forgetPasswordCodeTimer) {
+        //     return this.echoService.fail(1203, "verification code is being sent");
+        // } else {
+        //     this.forgetPasswordCodeTimer = true;
+        // }
+
+        // 账号不符合邮箱规则
+        if (!(params.username && new RegExp(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(params.username))) {
+            return this.echoService.fail(1000, "please enter your vaild email");
+        }
+
+        // 用户名不存在
+        if (!params.username || !await this.userService.verifyUserExist(params.username)) {
+            return this.echoService.fail(1003, "username does not exist");
+        }
+
+        const randomCode = this.toolsService.randomGenerator(6);
+
+        const mailOptions = {
+            to     : params.username,
+            subject: `racoon note 找回登录密码 ✔ 验证码：${randomCode}`,
+            text   : `您使用了 racoon note 提供的找回登录密码服务，验证码是：${randomCode} 请勿泄露给其他人`,
+            html   : `<b>您使用了 racoon note 提供的找回登录密码服务，验证码是：<em style="color: red">${randomCode}</em> 请勿泄露给其他人</b>`
+        };
+
+        const sendMailResponse       = await this.mailService.send(mailOptions);
+        this.forgetPasswordCodeTimer = true;
+
+        if (sendMailResponse.messageId) {
+            const forgetPasswordCodeBody = {
+                username  : params.username,
+                expireDate: timestamp + 30000
+            };
+            storeService.put('forgetPasswordCode', randomCode, forgetPasswordCodeBody);
+            return this.echoService.success();
+        } else {
+            return this.echoService.fail(1204, "verification code failed to be sent, please resend");
+        }
+
     }
 
     // 删除数据
