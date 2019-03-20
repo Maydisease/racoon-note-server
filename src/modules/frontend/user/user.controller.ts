@@ -199,6 +199,7 @@ export class UserController {
 
         if (!(
             storeService.storeList['forgetPasswordCode'] &&
+            storeService.storeList['forgetPasswordCode'][params.verifycode] &&
             storeService.storeList['forgetPasswordCode'][params.verifycode].expireDate > timestamp &&
             storeService.storeList['forgetPasswordCode'][params.verifycode].username === params.username
         )) {
