@@ -8,7 +8,7 @@ export class _User {
     @Column({type: 'varchar', length: 13})
     userId: string;
 
-    @Column({type: 'varchar', length: 13})
+    @Column({type: 'varchar', length: 26})
     username: string;
 
     @Column({type: 'longtext'})
