@@ -39,11 +39,15 @@ export class ArticleService {
         return new ArticleModel(this.connection).setArticleDisableState(id, uid, disable, updateTime)
     }
 
+    public setArticleLockState(id: number, uid: string, lock: number, updateTime: number) {
+        return new ArticleModel(this.connection).setArticleLockState(id, uid, lock, updateTime)
+    }
+
     public getCategoryData(uid: string) {
         return new ArticleModel(this.connection).getCategoryData(uid)
     }
 
-    public getSearchData(uid: string, keys: string, type: string, disable: number) {
-        return new ArticleModel(this.connection).getSearchData(uid, keys, type, disable)
+    public getSearchData(uid: string, keys: string, type: string, disable: number, lock: number) {
+        return new ArticleModel(this.connection).getSearchData(uid, keys, type, disable, lock)
     }
 }

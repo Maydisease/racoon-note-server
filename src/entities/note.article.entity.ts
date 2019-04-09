@@ -21,6 +21,9 @@ export class _NoteArticle {
     html_content?: string;
 
     @Column({type: 'int', default: 0})
+    lock: number;
+
+    @Column({type: 'int', default: 0})
     disable: number;
 
     @Column({type: 'bigint', precision: 13})

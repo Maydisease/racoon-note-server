@@ -57,6 +57,14 @@ interface setArticleDisableStateBody {
     updateTime?: number
 }
 
+interface setArticleLockStateBody {
+    id: number,
+    uid?: string,
+    lock: number,
+    password?: string,
+    updateTime?: number
+}
+
 @Controller('note')
 export class ArticleController {
 
@@ -65,6 +73,7 @@ export class ArticleController {
     constructor(
         @Inject('toolsService') public toolsService,
         @Inject('echoService') public echoService,
+        @Inject('userService') public userService,
         @Inject('articleService') public articleService: ArticleService
     ) {
         this.markdownIt = new MarkdownIt({
@@ -204,10 +213,38 @@ export class ArticleController {
 
     };
 
+    @Post('setArticleLockState')
+    async setArticleLockState(@Body() body: setArticleLockStateBody, @Request() req) {
+        const timestamp                     = new Date().getTime();
+        let params: setArticleLockStateBody = this.toolsService.filterInvalidParams({
+            id        : Number(body.id),
+            lock      : Number(body.lock),
+            password  : String(body.password),
+            uid       : String(req.userInfo.userId),
+            updateTime: timestamp
+        });
+
+        let userExistResponse: any;
+
+        if (params.lock === 0) {
+            params.password   = this.toolsService.getMD5(params.password);
+            userExistResponse = await this.userService.verifyUserValidity(req.userInfo.username, params.password);
+            if (!(userExistResponse && userExistResponse.length > 0)) {
+                return this.echoService.fail(1003, "username does not exist");
+            }
+        }
+
+        const response = await this.articleService.setArticleLockState(params.id, params.uid, params.lock, params.updateTime);
+
+        return this.echoService.success(response);
+
+    }
+
     @Post('search')
     async search(@Body() body: any, @Request() req) {
         let params: any = this.toolsService.filterInvalidParams({
             disable: 0,
+            lock   : 0,
             keys   : String(body.keys),
             type   : Number(body.type) === 0 ? 'title' : 'html_content',
             uid    : String(req.userInfo.userId)
@@ -215,7 +252,7 @@ export class ArticleController {
 
         const sourceData = await Promise.all([
             this.articleService.getCategoryData(params.uid),
-            this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable)
+            this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable, params.lock)
         ]);
 
         const categoryData = sourceData[0];

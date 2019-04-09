@@ -121,6 +121,21 @@ export class ArticleModel {
                    .execute();
     }
 
+    public setArticleLockState(id: number, uid: string, lock: number, updateTime: number) {
+        const setBody: any = {
+            lock,
+            updateTime
+        };
+
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableNoteArticle)
+                   .set(setBody)
+                   .where("id = :id", {id: id})
+                   .andWhere("uid = :uid", {uid: uid})
+                   .execute();
+    }
+
     public getCategoryData(uid: string) {
         return this.connection.getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
@@ -129,11 +144,12 @@ export class ArticleModel {
                    .getMany();
     }
 
-    public getSearchData(uid, keys, type, disable) {
+    public getSearchData(uid, keys, type, disable, lock) {
 
         const where = {
             uid,
-            disable
+            disable,
+            lock
         };
 
         where[type] = Like(`%${keys}%`);
