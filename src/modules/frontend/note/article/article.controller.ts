@@ -74,6 +74,7 @@ export class ArticleController {
         @Inject('toolsService') public toolsService,
         @Inject('echoService') public echoService,
         @Inject('userService') public userService,
+        @Inject('errorService') public errorService,
         @Inject('articleService') public articleService: ArticleService
     ) {
         this.markdownIt = new MarkdownIt({
@@ -113,7 +114,7 @@ export class ArticleController {
 
         // 判断数据是否正常取出了
         if (!response) {
-            return this.echoService.fail(9001, "Data read failed");
+            return this.echoService.fail(9001,);
         }
 
         response.forEach((item, index: number) => {
@@ -144,19 +145,19 @@ export class ArticleController {
 
         // 判断当前uid是否是有效的用户
         if (!params.uid || !await this.articleService.verifyUserExist(params.uid)) {
-            return this.echoService.fail(1200, "user does not exist");
+            return this.echoService.fail(1001, this.errorService.error.E1001);
         }
 
         // 判断当前cid是否是有效的分类
         if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid)) {
-            return this.echoService.fail(1201, "category does not exist");
+            return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
         const response: any = await this.articleService.addArticleData(params);
 
         // 判断数据是否正常插入到了article表
         if (!(response && response.raw.insertId > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -178,14 +179,14 @@ export class ArticleController {
 
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
-            return this.echoService.fail(1201, "article does not exist");
+            return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
         const response: any = await this.articleService.updateArticleData(params.id, params);
 
         // 判断数据是否正常插入到了article表
         if (!(response && response.raw.changedRows > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -206,7 +207,7 @@ export class ArticleController {
 
         // 判断数据是否正常插入到了article表
         if (!(response && response.raw.changedRows > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -230,7 +231,7 @@ export class ArticleController {
             params.password   = this.toolsService.getMD5(params.password);
             userExistResponse = await this.userService.verifyUserValidity(req.userInfo.username, params.password);
             if (!(userExistResponse && userExistResponse.length > 0)) {
-                return this.echoService.fail(1003, "username does not exist");
+                return this.echoService.fail(1004, this.errorService.error.E1004);
             }
         }
 

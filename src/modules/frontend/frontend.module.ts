@@ -12,6 +12,7 @@ import {ArticleService}      from "./note/article/article.service";
 import {AttachedService}     from "./attached/attached.service";
 import {UserLoginOAuthGuard} from "../../guard/userLoginOAuth.guard";
 import {APP_GUARD}           from "@nestjs/core";
+import {ErrorService}        from "../../common/service/error.service";
 
 @Module({
     controllers: [
@@ -28,7 +29,8 @@ import {APP_GUARD}           from "@nestjs/core";
         {provide: 'categoryService', useClass: CategoryService},
         {provide: 'userService', useClass: UserService},
         {provide: 'articleService', useClass: ArticleService},
-        {provide: 'attachedService', useClass: AttachedService}
+        {provide: 'attachedService', useClass: AttachedService},
+        {provide: 'errorService', useClass: ErrorService}
     ]
 })
 

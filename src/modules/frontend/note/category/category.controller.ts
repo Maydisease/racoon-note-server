@@ -32,7 +32,8 @@ export class CategoryController {
     constructor(
         @Inject('toolsService') public toolsService,
         @Inject('echoService') public echoService,
-        @Inject('categoryService') public categoryService
+        @Inject('categoryService') public categoryService,
+        @Inject('errorService') public errorService
     ) {
 
     }
@@ -67,17 +68,17 @@ export class CategoryController {
 
         // 分类名长度应该为1-18个字符
         if (!(params.name && params.name.length > 0 && params.name.length <= 18)) {
-            return this.echoService.fail(1100, "Category length should be 1-18 characters");
+            return this.echoService.fail(1008, this.errorService.error.E1008);
         }
 
         // parent不存在
         if (params.parent !== 0 && !await this.categoryService.verifyCategoryParentExist(params.uid, params.parent)) {
-            return this.echoService.fail(1102, "Invalid parent category");
+            return this.echoService.fail(1009, this.errorService.error.E1009);
         }
 
         // 当前分类已存在
         if (await this.categoryService.verifyCategoryExist(params.name, params.uid, params.parent)) {
-            return this.echoService.fail(1103, "Category already exists");
+            return this.echoService.fail(1010, this.errorService.error.E1010);
         }
 
         // 写入数据
@@ -85,7 +86,7 @@ export class CategoryController {
 
         // 写入数据失败
         if (!(response && response.raw.insertId > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -107,24 +108,24 @@ export class CategoryController {
 
         // 分类名长度应该为1-18个字符
         if (!(params.name && params.name.length > 0 && params.name.length <= 18)) {
-            return this.echoService.fail(1100, "Category length should be 1-18 characters");
+            return this.echoService.fail(1008, this.errorService.error.E1008);
         }
 
         // 当前分类已存在
         if (await this.categoryService.verifyCategoryExist(params.name, params.uid, params.parent)) {
-            return this.echoService.fail(1103, "Category already exists");
+            return this.echoService.fail(1010, this.errorService.error.E1010);
         }
 
         // 当前分类不存在
         if (!await this.categoryService.verifyCategoryIdExist(params.id)) {
-            return this.echoService.fail(1104, "Category does not exist");
+            return this.echoService.fail(1011, this.errorService.error.E1011);
         }
 
         const response = await this.categoryService.renameCategory(params.id, params.name, params.updateTime, params.uid);
 
         // 写入数据失败
         if (!(response && response.raw.affectedRows > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success();
@@ -141,17 +142,17 @@ export class CategoryController {
         });
 
         if (!(params.id && ((typeof params.id === 'number') || (typeof params.id === 'object' && params.id.length > 0)))) {
-            return this.echoService.fail(1105, "Category id is an unsupported type");
+            return this.echoService.fail(1012, this.errorService.error.E1012);
         }
 
         // 当前分类存在子分类，不允许删除
         if (await this.categoryService.verifyExistSonCategory(params.id)) {
-            return this.echoService.fail(1106, "Current category has subcategories");
+            return this.echoService.fail(1013, this.errorService.error.E1013);
         }
 
         // 当前分类存在文章，不允许删除
         if (await this.categoryService.verifyExistArticle(params.id)) {
-            return this.echoService.fail(1107, "Current category has articles");
+            return this.echoService.fail(1014, this.errorService.error.E1014);
         }
 
         let response;
@@ -165,7 +166,7 @@ export class CategoryController {
         }
 
         if (!(response && response.raw.affectedRows > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success();

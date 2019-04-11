@@ -30,7 +30,8 @@ export class UserController {
         @Inject('toolsService') public toolsService,
         @Inject('userService') public userService,
         @Inject('echoService') public echoService,
-        @Inject('mailService') public mailService
+        @Inject('mailService') public mailService,
+        @Inject('errorService') public errorService
     ) {
         this.forgetPasswordCodeTimer = false;
     }
@@ -38,7 +39,6 @@ export class UserController {
     // 获取分类数据
     @Post('getUserData')
     async getUserData(@Body() body) {
-
     }
 
     // 异步验证状态
@@ -67,7 +67,7 @@ export class UserController {
 
         // 用户名已被占用
         if (await this.userService.verifyUserExist(params.username)) {
-            return this.echoService.fail(1002, "Username already exists");
+            return this.echoService.fail(1006, this.errorService.error.E1006);
         }
 
         return this.echoService.success();
@@ -89,17 +89,17 @@ export class UserController {
 
         // 账号不符合邮箱规则
         if (!(params.username && new RegExp(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(params.username))) {
-            return this.echoService.fail(1000, "please enter your vaild email");
+            return this.echoService.fail(1007, this.errorService.error.E1007);
         }
 
         // 密码不一致 or 不符合规则
         if (!(params.password === body.repassword && new RegExp(/^[0-9a-zA-Z]{6,16}$/).test(params.password))) {
-            return this.echoService.fail(1001, "Password twice inconsistencies");
+            return this.echoService.fail(1018, this.errorService.error.E1018);
         }
 
         // 用户名已被占用
         if (await this.userService.verifyUserExist(params.username)) {
-            return this.echoService.fail(1002, "Username already exists");
+            return this.echoService.fail(1016, this.errorService.error.E1016);
         }
 
         params.password = this.toolsService.getMD5(params.password);
@@ -108,7 +108,7 @@ export class UserController {
 
         // 写入数据失败
         if (!(response && response.raw.insertId > 0)) {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -127,12 +127,12 @@ export class UserController {
 
         // 用户名不存在
         if (!params.username || !await this.userService.verifyUserExist(params.username)) {
-            return this.echoService.fail(1003, "username does not exist");
+            return this.echoService.fail(1004, this.errorService.error.E1004);
         }
 
         // 密码不符合规则
         if (!params.password || !(new RegExp(/^[0-9a-zA-Z]{6,16}$/).test(params.password))) {
-            return this.echoService.fail(1001, "Password does not match the rule");
+            return this.echoService.fail(1009, this.errorService.error.E1009);
         }
 
         params.password = this.toolsService.getMD5(params.password);
@@ -149,7 +149,7 @@ export class UserController {
 
             return this.echoService.success(responseBody);
         } else {
-            return this.echoService.fail(1004, "Username and password do not match");
+            return this.echoService.fail(1020, this.errorService.error.E1020);
         }
 
     }
@@ -161,13 +161,13 @@ export class UserController {
 
         // 用户名不存在
         if (!authToken) {
-            return this.echoService.fail(4000, "Invalid token");
+            return this.echoService.fail(1015, this.errorService.error.E1015);
         }
 
         const userParams = this.toolsService.decodeUserToken(authToken);
 
         if (!userParams) {
-            return this.echoService.fail(4000, "Invalid token");
+            return this.echoService.fail(1015, this.errorService.error.E1015);
         }
 
         const params = this.toolsService.filterInvalidParams({
@@ -180,7 +180,7 @@ export class UserController {
         const response = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
 
         if (!response) {
-            return this.echoService.fail(4000, "Invalid token");
+            return this.echoService.fail(1015, this.errorService.error.E1015);
         }
 
         return this.echoService.success();
@@ -204,19 +204,19 @@ export class UserController {
             storeService.storeList['forgetPasswordCode'][params.verifycode].username === params.username
         )) {
             storeService.remove('forgetPasswordCode', params.verifycode);
-            return this.echoService.fail(1202, "The verification code does not match the account number.");
+            return this.echoService.fail(1021, this.errorService.error.E1021);
         }
 
         storeService.remove('forgetPasswordCode', params.verifycode);
 
         // 用户名不存在
         if (!params.username || !await this.userService.verifyUserExist(params.username)) {
-            return this.echoService.fail(1003, "username does not exist");
+            return this.echoService.fail(1004, this.errorService.error.E1004);
         }
 
         // 密码不符合规则
         if (!params.password || !(new RegExp(/^[0-9a-zA-Z]{6,16}$/).test(params.password))) {
-            return this.echoService.fail(1001, "Password does not match the rule");
+            return this.echoService.fail(1019, this.errorService.error.E1019);
         }
 
         params.password = this.toolsService.getMD5(params.password);
@@ -225,7 +225,7 @@ export class UserController {
         if (response && response.raw && response.raw.changedRows > 0) {
             return this.echoService.success();
         } else {
-            return this.echoService.fail(9001, "Data write failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
     }
@@ -247,12 +247,12 @@ export class UserController {
 
         // 账号不符合邮箱规则
         if (!(params.username && new RegExp(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(params.username))) {
-            return this.echoService.fail(1000, "please enter your vaild email");
+            return this.echoService.fail(1017, this.errorService.error.E1017);
         }
 
         // 用户名不存在
         if (!params.username || !await this.userService.verifyUserExist(params.username)) {
-            return this.echoService.fail(1003, "username does not exist");
+            return this.echoService.fail(1004, this.errorService.error.E1004);
         }
 
         const randomCode = this.toolsService.randomGenerator(6);
@@ -275,7 +275,7 @@ export class UserController {
             storeService.put('forgetPasswordCode', randomCode, forgetPasswordCodeBody);
             return this.echoService.success();
         } else {
-            return this.echoService.fail(1204, "verification code failed to be sent, please resend");
+            return this.echoService.fail(1022, this.errorService.error.E1022);
         }
 
     }

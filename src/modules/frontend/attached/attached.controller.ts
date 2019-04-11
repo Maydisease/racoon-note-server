@@ -15,6 +15,7 @@ export class AttachedController {
         @Inject('toolsService') public toolsService,
         @Inject('userService') public userService,
         @Inject('echoService') public echoService,
+        @Inject('errorService') public errorService,
         @Inject('attachedService') public attachedService: AttachedService
     ) {
         this.imageType = ['.jpg', '.jpeg', '.png', '.gif'];
@@ -60,7 +61,7 @@ export class AttachedController {
             }
 
         } else {
-            return this.echoService.fail(1099, `upload ${body.name} file error`);
+            return this.echoService.fail(1005, this.errorService.error.E1005);
         }
     }
 
@@ -75,7 +76,7 @@ export class AttachedController {
 
         // 判断数据是否正常取出了
         if (!response) {
-            return this.echoService.fail(9001, "Data read failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
         return this.echoService.success(response);
@@ -106,17 +107,17 @@ export class AttachedController {
             const readyRemoveAttachedPath = path.resolve(attachedPath, attachedType, getOneAttached.path);
             const attachedExists          = fs.existsSync(readyRemoveAttachedPath);
             if (!attachedExists) {
-                return this.echoService.fail(1120, "attached does not exist");
+                return this.echoService.fail(1006, this.errorService.error.E1006);
             }
             const removeErr: any = fs.unlinkSync(readyRemoveAttachedPath);
             if (!removeErr) {
                 return this.echoService.success(response);
             } else {
-                return this.echoService.fail(1121, "remove attached failed");
+                return this.echoService.fail(1007, this.errorService.error.E1007);
             }
 
         } else {
-            return this.echoService.fail(9002, "Data remove failed");
+            return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
     }

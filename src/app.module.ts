@@ -1,11 +1,11 @@
 import {Module}          from '@nestjs/common';
 import {AppController}   from './app.controller';
 import {AppService}      from './app.service';
+import {ErrorService}    from './common/service/error.service';
 import {TypeOrmModule}   from '@nestjs/typeorm';
 import {DBConf}          from './config/typeorm_conf';
 import {BackstageModule} from './modules/backstage/backstage.module';
 import {FrontendModule}  from './modules/frontend/frontend.module';
-
 
 @Module({
     imports    : [
@@ -14,7 +14,9 @@ import {FrontendModule}  from './modules/frontend/frontend.module';
         TypeOrmModule.forRoot(DBConf)
     ],
     controllers: [AppController],
-    providers  : [AppService],
+    providers  : [
+        AppService,
+    ]
 })
 export class AppModule {
     constructor() {

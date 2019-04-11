@@ -9,7 +9,8 @@ export class UserLoginOAuthGuard implements CanActivate {
     public userService: UserService;
 
     constructor(
-        @Inject('toolsService') public toolsService
+        @Inject('toolsService') public toolsService,
+        @Inject('errorService') public errorService
     ) {
         this.onWhileList = true;
         this.userService = new UserService();
@@ -58,8 +59,8 @@ export class UserLoginOAuthGuard implements CanActivate {
         if (!isLoginState) {
             throw new HttpException({
                 status: HttpStatus.FORBIDDEN,
-                error : 'Invalid token',
-            }, 4000);
+                error : this.errorService.error.E1015,
+            }, 1015);
         }
 
         return isLoginState;
