@@ -1,29 +1,36 @@
 import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 
-interface addCategoryDataBody {
-    name: string,
-    uid: string,
-    parent: number,
-    count: number,
-    updateTime: number,
-    inputTime: number
+interface AddCategoryDataBody {
+    name: string;
+    uid: string;
+    parent: number;
+    count: number;
+    updateTime: number;
+    inputTime: number;
 }
 
-interface getCategoryDataBody {
-    uid: string
+interface GetCategoryDataBody {
+    uid: string;
 }
 
-interface renameCategoryBody {
-    id: number,
-    parent: number,
-    name: string,
-    uid: string,
-    updateTime: number
+interface RenameCategoryBody {
+    id: number;
+    parent: number;
+    name: string;
+    uid: string;
+    updateTime: number;
 }
 
-interface removeCategoryBody {
-    id: number | Array<number>,
-    uid: string
+interface UpdateCategoryIcon {
+    id: number;
+    iconText: string;
+    uid: string;
+    updateTime: number;
+}
+
+interface RemoveCategoryBody {
+    id: number | number[];
+    uid: string;
 }
 
 @Controller('note')
@@ -33,7 +40,7 @@ export class CategoryController {
         @Inject('toolsService') public toolsService,
         @Inject('echoService') public echoService,
         @Inject('categoryService') public categoryService,
-        @Inject('errorService') public errorService
+        @Inject('errorService') public errorService,
     ) {
 
     }
@@ -42,8 +49,8 @@ export class CategoryController {
     @Post('getCategoryData')
     async getCategoryData(@Request() req): Promise<object> {
 
-        const params: getCategoryDataBody = this.toolsService.filterInvalidParams({
-            uid: req.userInfo.userId
+        const params: GetCategoryDataBody = this.toolsService.filterInvalidParams({
+            uid: req.userInfo.userId,
         });
 
         const response = await this.categoryService.getCategoryData(params.uid);
@@ -57,13 +64,13 @@ export class CategoryController {
 
         // 格式化数据
         const timestamp                   = new Date().getTime();
-        const params: addCategoryDataBody = this.toolsService.filterInvalidParams({
+        const params: AddCategoryDataBody = this.toolsService.filterInvalidParams({
             name      : String(body.name),
             uid       : String(req.userInfo.userId),
             parent    : Number(body.parent) || 0,
             count     : 0,
             updateTime: timestamp,
-            inputTime : timestamp
+            inputTime : timestamp,
         });
 
         // 分类名长度应该为1-18个字符
@@ -98,12 +105,12 @@ export class CategoryController {
 
         // 格式化数据
         const timestamp                  = new Date().getTime();
-        const params: renameCategoryBody = this.toolsService.filterInvalidParams({
+        const params: RenameCategoryBody = this.toolsService.filterInvalidParams({
             id        : Number(body.id),
             parent    : Number(body.parent),
             uid       : String(req.userInfo.userId),
             name      : String(body.newName),
-            updateTime: timestamp
+            updateTime: timestamp,
         });
 
         // 分类名长度应该为1-18个字符
@@ -131,14 +138,46 @@ export class CategoryController {
         return this.echoService.success();
     }
 
+    // 更改分类名
+    @Post('updateCategoryIcon')
+    public async updateCategoryIcon(@Body() body, @Request() req) {
+        // 格式化数据
+        const timestamp                  = new Date().getTime();
+        const params: UpdateCategoryIcon = this.toolsService.filterInvalidParams({
+            id        : Number(body.id),
+            uid       : String(req.userInfo.userId),
+            iconText  : String(body.iconText),
+            updateTime: timestamp,
+        });
+
+        // 当前分类不存在
+        if (!await this.categoryService.verifyCategoryIdExist(params.id)) {
+            return this.echoService.fail(1011, this.errorService.error.E1011);
+        }
+
+        // 当前IconText不能为空
+        if (!(params.iconText && params.iconText.length > 0)) {
+            return this.echoService.fail(1023, this.errorService.error.E1023);
+        }
+
+        const response = await this.categoryService.updateCategoryIcon(params.id, params.uid, params.iconText, params.updateTime);
+
+        // 写入数据失败
+        if (!(response && response.raw.affectedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        return this.echoService.success();
+    }
+
     // 删除数据
     @Post('removeCategory')
     async removeCategory(@Body() body, @Request() req) {
 
         // 格式化数据
-        const params: removeCategoryBody = this.toolsService.filterInvalidParams({
+        const params: RemoveCategoryBody = this.toolsService.filterInvalidParams({
             id : Number(body.id),
-            uid: String(req.userInfo.userId)
+            uid: String(req.userInfo.userId),
         });
 
         if (!(params.id && ((typeof params.id === 'number') || (typeof params.id === 'object' && params.id.length > 0)))) {

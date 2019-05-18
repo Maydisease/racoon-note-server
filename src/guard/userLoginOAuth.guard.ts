@@ -1,20 +1,20 @@
 import {CanActivate, ExecutionContext, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
-import {UserService}                                                                  from "../modules/frontend/user/user.service";
+import {UserService}                                                                  from '../modules/frontend/user/user.service';
 
 @Injectable()
 export class UserLoginOAuthGuard implements CanActivate {
 
-    public whileList: Array<string>;
+    public whileList: string[];
     public onWhileList: boolean;
     public userService: UserService;
 
     constructor(
         @Inject('toolsService') public toolsService,
-        @Inject('errorService') public errorService
+        @Inject('errorService') public errorService,
     ) {
         this.onWhileList = true;
         this.userService = new UserService();
-        this.whileList   = ['/user', '/logs', '/mail']
+        this.whileList   = ['/user', '/logs', '/mail'];
     }
 
     async canActivate(
@@ -44,7 +44,7 @@ export class UserLoginOAuthGuard implements CanActivate {
                     username : String(userParams.username),
                     userId   : String(userParams.userId),
                     password : String(userParams.password),
-                    inputTime: Number(userParams.inputTime)
+                    inputTime: Number(userParams.inputTime),
                 });
 
                 context.switchToHttp().getRequest()['userInfo'] = params;

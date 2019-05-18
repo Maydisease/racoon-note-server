@@ -1,3 +1,3 @@
 import {dirExists, getFilePathStat} from './files.utils';
 
-export {dirExists, getFilePathStat}
+export {dirExists, getFilePathStat};

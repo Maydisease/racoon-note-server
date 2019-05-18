@@ -1,16 +1,16 @@
 import CONFIG from '../index';
 
 interface ConfInterface {
-    type: any,
-    host: string,
-    port: string,
-    username: string,
-    password: string,
-    database: string,
+    type: any;
+    host: string;
+    port: string;
+    username: string;
+    password: string;
+    database: string;
 
-    [entities: string]: any,
+    [entities: string]: any;
 
-    synchronize: boolean
+    synchronize: boolean;
 }
 
 const dbConf: ConfInterface = {
@@ -22,8 +22,8 @@ const dbConf: ConfInterface = {
     database   : CONFIG.DB.DB_DATABASE,
     entities   : [CONFIG.PATH.BASIC + '/**/*.entity{.ts,.js}'],
     synchronize: true,
-    charset: 'utf8mb4',
-    logging    : true
+    charset    : 'utf8mb4',
+    logging    : true,
 };
 
 export default dbConf;

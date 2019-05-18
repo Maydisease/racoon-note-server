@@ -16,18 +16,18 @@ export class AttachedController {
         @Inject('userService') public userService,
         @Inject('echoService') public echoService,
         @Inject('errorService') public errorService,
-        @Inject('attachedService') public attachedService: AttachedService
+        @Inject('attachedService') public attachedService: AttachedService,
     ) {
         this.imageType = ['.jpg', '.jpeg', '.png', '.gif'];
     }
 
-    // 获取分类数据
+    // 上传附件
     @Post('upload')
     async upload(@Body() body, @Request() req) {
 
         const timestamp: number     = new Date().getTime();
-        const private_space         = this.toolsService.getMD5(req.userInfo.userId);
-        let attachedPath            = path.join(conf.PATH.ATTACHED_FILES, private_space);
+        const privateSpace          = this.toolsService.getMD5(req.userInfo.userId);
+        const attachedPath          = path.join(conf.PATH.ATTACHED_FILES, privateSpace);
         let fileSaveDirPath: string = '';
         let fileSavePath: string    = '';
         const randomFileName        = `${timestamp}${body.type}`;
@@ -51,7 +51,7 @@ export class AttachedController {
                 type      : String(body.type),
                 size      : Number(body.size),
                 updateTime: timestamp,
-                inputTime : timestamp
+                inputTime : timestamp,
             });
 
             const response: any = await this.attachedService.addAttached(params);
@@ -69,7 +69,7 @@ export class AttachedController {
     async getAttachedData(@Body() body, @Request() req) {
 
         const params = this.toolsService.filterInvalidParams({
-            uid: req.userInfo.userId
+            uid: req.userInfo.userId,
         });
 
         const response = await this.attachedService.getAttached(params.uid);
@@ -85,8 +85,8 @@ export class AttachedController {
     @Post('removeAttached')
     async removeAttached(@Body() body, @Request() req) {
 
-        const private_space = this.toolsService.getMD5(req.userInfo.userId);
-        let attachedPath    = path.join(conf.PATH.ATTACHED_FILES, private_space);
+        const privateSpace = this.toolsService.getMD5(req.userInfo.userId);
+        const attachedPath = path.join(conf.PATH.ATTACHED_FILES, privateSpace);
 
         const params = this.toolsService.filterInvalidParams({
             ids: body.ids,

@@ -3,13 +3,13 @@ import * as dotenv from 'dotenv';
 
 let testEnvConfPath: string;
 
-switch(process.env.APP_ENV){
-    case 'development': 
+switch (process.env.APP_ENV) {
+    case 'development':
         testEnvConfPath = path.join(__dirname, '../../env/test.env');
-    break;
-    case 'production': 
+        break;
+    case 'production':
         testEnvConfPath = path.join(__dirname, '../../../env/test.env');
-    break;
+        break;
 }
 
 const testEnvConf = dotenv.config({path: testEnvConfPath}).parsed;
@@ -21,10 +21,10 @@ export default {
         DB_PORT    : testEnvConf.DB_PORT,
         DB_DATABASE: testEnvConf.DB_DATABASE,
         DB_USERNAME: testEnvConf.DB_USERNAME,
-        DB_PASSWORD: testEnvConf.DB_PASSWORD
+        DB_PASSWORD: testEnvConf.DB_PASSWORD,
     },
     APP: {
         APP_RUN_HOST: testEnvConf.APP_RUN_HOST,
-        APP_RUN_PORT: testEnvConf.APP_RUN_PORT
-    }
-}
+        APP_RUN_PORT: testEnvConf.APP_RUN_PORT,
+    },
+};

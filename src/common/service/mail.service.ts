@@ -1,23 +1,23 @@
-import * as nodemailer             from "nodemailer";
+import * as nodemailer             from 'nodemailer';
 import {Injectable}                from '@nestjs/common';
 import {Connection, getConnection} from 'typeorm';
 
 interface MailOptions {
-    from?: string
-    to?: string
-    subject?: string
-    text?: string
-    html?: string
+    from?: string;
+    to?: string;
+    subject?: string;
+    text?: string;
+    html?: string;
 }
 
 interface TransporterOptions {
-    host: string,
-    port: number,
-    secure: boolean,
+    host: string;
+    port: number;
+    secure: boolean;
     auth: {
-        user: string,
-        pass: string
-    }
+        user: string;
+        pass: string;
+    };
 }
 
 @Injectable()
@@ -34,17 +34,17 @@ export class MailService {
         this.secret     = 'note';
 
         this.mailOptions = {
-            from: `racoon <racoon_note@163.com>`
+            from: `racoon <racoon_note@163.com>`,
         };
 
         this.transporterOptions = {
-            host  : "smtp.163.com",
+            host  : 'smtp.163.com',
             port  : 587,
             secure: true, // true for 465, false for other ports
             auth  : {
                 user: 'racoon_note@163.com', // generated ethereal user
-                pass: 'Tan75577918' // generated ethereal password
-            }
+                pass: 'Tan75577918', // generated ethereal password
+            },
         };
 
         this.transporter = nodemailer.createTransport(this.transporterOptions);
@@ -52,7 +52,7 @@ export class MailService {
     }
 
     public async send(mailOptions: MailOptions) {
-        let info = await this.transporter.sendMail({...this.mailOptions, ...mailOptions});
+        const info = await this.transporter.sendMail({...this.mailOptions, ...mailOptions});
         return info;
     }
 }

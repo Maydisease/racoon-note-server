@@ -1,5 +1,5 @@
 import {Controller, Get, Inject, UseGuards} from '@nestjs/common';
-import {TestGuard}                          from "../test.guard";
+import {TestGuard}                          from '../test.guard';
 
 @Controller('api/admin')
 @UseGuards(TestGuard)

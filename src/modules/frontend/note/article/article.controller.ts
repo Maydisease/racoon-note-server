@@ -25,44 +25,44 @@ const markdownItImsize  = require('markdown-it-imsize');
 
 declare var Prism: any;
 
-interface addArticleDataBody {
-    title: string,
-    uid: string,
-    cid: number,
-    markdown_content?: string,
-    html_content?: string,
-    updateTime?: number,
-    inputTime?: number
+interface AddArticleDataBody {
+    title: string;
+    uid: string;
+    cid: number;
+    markdown_content?: string;
+    html_content?: string;
+    updateTime?: number;
+    inputTime?: number;
 }
 
-interface updateArticleDataBody {
-    id: number,
-    title?: string,
-    uid?: string,
-    markdown_content?: string,
-    html_content?: string,
-    updateTime: number
+interface UpdateArticleDataBody {
+    id: number;
+    title?: string;
+    uid?: string;
+    markdown_content?: string;
+    html_content?: string;
+    updateTime: number;
 }
 
-interface getArticleData {
-    cid: number,
-    uid: string,
-    disable: number
+interface GetArticleData {
+    cid: number;
+    uid: string;
+    disable: number;
 }
 
-interface setArticleDisableStateBody {
-    id: number,
-    uid?: string,
-    disable: number,
-    updateTime?: number
+interface SetArticleDisableStateBody {
+    id: number;
+    uid?: string;
+    disable: number;
+    updateTime?: number;
 }
 
-interface setArticleLockStateBody {
-    id: number,
-    uid?: string,
-    lock: number,
-    password?: string,
-    updateTime?: number
+interface SetArticleLockStateBody {
+    id: number;
+    uid?: string;
+    lock: number;
+    password?: string;
+    updateTime?: number;
 }
 
 @Controller('note')
@@ -75,7 +75,7 @@ export class ArticleController {
         @Inject('echoService') public echoService,
         @Inject('userService') public userService,
         @Inject('errorService') public errorService,
-        @Inject('articleService') public articleService: ArticleService
+        @Inject('articleService') public articleService: ArticleService,
     ) {
         this.markdownIt = new MarkdownIt({
             highlight: (str: string, lang: string) => {
@@ -95,7 +95,7 @@ export class ArticleController {
                 html = `<pre class="language-${language}" language="${language}"><code>${htmlStr}</code></pre>`;
 
                 return html;
-            }
+            },
         })
             .use(markdownItMermaid)
             .use(markdownItImsize);
@@ -104,17 +104,17 @@ export class ArticleController {
     // 获取分类数据
     @Post('getArticleData')
     async getArticleData(@Body() body, @Request() req) {
-        const params: getArticleData = this.toolsService.filterInvalidParams({
+        const params: GetArticleData = this.toolsService.filterInvalidParams({
             cid    : Number(body.cid),
             uid    : String(req.userInfo.userId),
-            disable: 0
+            disable: 0,
         });
 
         const response: any = await this.articleService.getArticleData(params.cid, params.uid, params.disable);
 
         // 判断数据是否正常取出了
         if (!response) {
-            return this.echoService.fail(9001,);
+            return this.echoService.fail(9001);
         }
 
         response.forEach((item, index: number) => {
@@ -125,14 +125,14 @@ export class ArticleController {
         });
 
         return this.echoService.success(response);
-    };
+    }
 
     @Post('addArticleData')
-    async addArticleData(@Body() body: addArticleDataBody, @Request() req): Promise<object> {
+    async addArticleData(@Body() body: AddArticleDataBody, @Request() req): Promise<object> {
         // 格式化数据
 
         const timestamp: number          = new Date().getTime();
-        const params: addArticleDataBody = this.toolsService.filterInvalidParams({
+        const params: AddArticleDataBody = this.toolsService.filterInvalidParams({
             title           : String(body.title),
             uid             : String(req.userInfo.userId),
             cid             : Number(body.cid),
@@ -140,7 +140,7 @@ export class ArticleController {
             html_content    : String(body.markdown_content ? this.markdownIt.render(body.markdown_content) : ''),
             disable         : 0,
             updateTime      : timestamp,
-            inputTime       : timestamp
+            inputTime       : timestamp,
         });
 
         // 判断当前uid是否是有效的用户
@@ -165,16 +165,16 @@ export class ArticleController {
     }
 
     @Post('updateArticleData')
-    async updateArticleData(@Body() body: updateArticleDataBody, @Request() req): Promise<object> {
+    async updateArticleData(@Body() body: UpdateArticleDataBody, @Request() req): Promise<object> {
 
-        const timestamp                   = new Date().getTime();
-        let params: updateArticleDataBody = this.toolsService.filterInvalidParams({
+        const timestamp                     = new Date().getTime();
+        const params: UpdateArticleDataBody = this.toolsService.filterInvalidParams({
             id              : Number(body.id),
             title           : String(body.title),
             uid             : String(req.userInfo.userId),
             markdown_content: String(body.markdown_content),
             html_content    : String(body.markdown_content ? this.markdownIt.render(body.markdown_content) : ''),
-            updateTime      : timestamp
+            updateTime      : timestamp,
         });
 
         // 判断当前id是否是有效的文章
@@ -194,13 +194,13 @@ export class ArticleController {
     }
 
     @Post('setArticleDisableState')
-    async setArticleDisableState(@Body() body: setArticleDisableStateBody, @Request() req): Promise<object> {
-        const timestamp                        = new Date().getTime();
-        let params: setArticleDisableStateBody = this.toolsService.filterInvalidParams({
+    async setArticleDisableState(@Body() body: SetArticleDisableStateBody, @Request() req): Promise<object> {
+        const timestamp                          = new Date().getTime();
+        const params: SetArticleDisableStateBody = this.toolsService.filterInvalidParams({
             id        : Number(body.id),
             disable   : Number(body.disable),
             uid       : String(req.userInfo.userId),
-            updateTime: timestamp
+            updateTime: timestamp,
         });
 
         const response: any = await this.articleService.setArticleDisableState(params.id, params.uid, params.disable, params.updateTime);
@@ -212,17 +212,17 @@ export class ArticleController {
 
         return this.echoService.success(response);
 
-    };
+    }
 
     @Post('setArticleLockState')
-    async setArticleLockState(@Body() body: setArticleLockStateBody, @Request() req) {
-        const timestamp                     = new Date().getTime();
-        let params: setArticleLockStateBody = this.toolsService.filterInvalidParams({
+    async setArticleLockState(@Body() body: SetArticleLockStateBody, @Request() req) {
+        const timestamp                       = new Date().getTime();
+        const params: SetArticleLockStateBody = this.toolsService.filterInvalidParams({
             id        : Number(body.id),
             lock      : Number(body.lock),
             password  : String(body.password),
             uid       : String(req.userInfo.userId),
-            updateTime: timestamp
+            updateTime: timestamp,
         });
 
         let userExistResponse: any;
@@ -243,17 +243,17 @@ export class ArticleController {
 
     @Post('search')
     async search(@Body() body: any, @Request() req) {
-        let params: any = this.toolsService.filterInvalidParams({
+        const params: any = this.toolsService.filterInvalidParams({
             disable: 0,
             lock   : 0,
             keys   : String(body.keys),
             type   : Number(body.type) === 0 ? 'title' : 'html_content',
-            uid    : String(req.userInfo.userId)
+            uid    : String(req.userInfo.userId),
         });
 
         const sourceData = await Promise.all([
             this.articleService.getCategoryData(params.uid),
-            this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable, params.lock)
+            this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable, params.lock),
         ]);
 
         const categoryData = sourceData[0];
@@ -261,11 +261,11 @@ export class ArticleController {
 
         const getCrumbs = (cid: number) => {
             const crumbs   = [];
-            const findLoop = (cid: number) => {
+            const findLoop = (cid1: number) => {
                 categoryData.filter((item: any) => {
-                    if (item.id === cid) {
+                    if (item.id === cid1) {
                         crumbs.unshift(item.name);
-                        findLoop(item.parent)
+                        findLoop(item.parent);
                     }
                 });
             };

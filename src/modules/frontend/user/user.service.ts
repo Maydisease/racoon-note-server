@@ -16,14 +16,14 @@ export class UserService {
 
     // 生成用户唯一ID
     public buildUserId(username: string, timestamp: string): string {
-        const value              = username + timestamp;
-        const username_sha256str = crypto.createHmac('sha256', this.secret).update(value).digest('hex');
-        return username_sha256str.substring(0, 13);
+        const value             = username + timestamp;
+        const usernameSha256str = crypto.createHmac('sha256', this.secret).update(value).digest('hex');
+        return usernameSha256str.substring(0, 13);
     }
 
     // 验证用户是否存在
     public async verifyUserExist(username: string): Promise<boolean> {
-        return await new UserModel(this.connection).verifyUserExist(username) >= 1
+        return await new UserModel(this.connection).verifyUserExist(username) >= 1;
     }
 
     public getUserData() {
@@ -53,9 +53,5 @@ export class UserService {
     // 更新用户密码
     public async updateUserPassword(username: string, password: string, updateTime: number) {
         return await new UserModel(this.connection).updateUserPassword(username, password, updateTime);
-    }
-
-    public removeUserData() {
-
     }
 }

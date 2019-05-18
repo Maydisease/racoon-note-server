@@ -5,8 +5,8 @@ import {MainService}    from './service/main.service';
 @Module({
     controllers: [MainController],
     providers: [
-        { provide: MainService, useClass: MainService }
-    ]
+        { provide: MainService, useClass: MainService },
+    ],
 })
 
 export class BackstageModule {

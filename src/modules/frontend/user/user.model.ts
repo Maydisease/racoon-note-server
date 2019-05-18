@@ -10,7 +10,7 @@ export class UserModel {
     }
 
     getUserData() {
-
+        console.log('');
     }
 
     // 验证用户是否存在于表中
@@ -18,7 +18,7 @@ export class UserModel {
         return this.connection
                    .getRepository(this.tableUser)
                    .createQueryBuilder()
-                   .where("username = :username", {username: username})
+                   .where('username = :username', {username})
                    .getCount();
     }
 
@@ -36,11 +36,11 @@ export class UserModel {
     verifyUserValidity(username: string, password: string): Promise<object> {
         return this.connection.getRepository(this.tableUser).find(
             {
-                select: ["userId", "username", "options", "inputTime", "updateTime"],
+                select: ['userId', 'username', 'options', 'inputTime', 'updateTime'],
                 where : [
-                    {username, password}
-                ]
-            }
+                    {username, password},
+                ],
+            },
         );
     }
 
@@ -48,10 +48,10 @@ export class UserModel {
         return this.connection
                    .getRepository(this.tableUser)
                    .createQueryBuilder()
-                   .where("username = :username", {username: username})
-                   .andWhere("userId = :userId", {userId: userId})
-                   .andWhere("password = :password", {password: password})
-                   .andWhere("inputTime = :inputTime", {inputTime: inputTime})
+                   .where('username = :username', {username})
+                   .andWhere('userId = :userId', {userId})
+                   .andWhere('password = :password', {password})
+                   .andWhere('inputTime = :inputTime', {inputTime})
                    .getCount();
     }
 
@@ -59,23 +59,23 @@ export class UserModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableUser)
-                   .set({lastTime: lastTime})
-                   .where("userId = :userId", {userId})
+                   .set({lastTime})
+                   .where('userId = :userId', {userId})
                    .execute();
     }
 
     updateUserPassword(username: string, password: string, updateTime: number) {
 
         const setBody: any = {
-            password  : password,
-            updateTime: updateTime
+            password,
+            updateTime,
         };
 
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableUser)
                    .set(setBody)
-                   .where("username = :username", {username: username})
+                   .where('username = :username', {username})
                    .execute();
     }
 }

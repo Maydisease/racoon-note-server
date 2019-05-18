@@ -17,6 +17,12 @@ export class _NoteCategory {
     @Column({type: 'int', precision: 11})
     count: string;
 
+    @Column({type: 'varchar', precision: 11})
+    iconText: string;
+
+    @Column({type: 'varchar', precision: 13})
+    iconColor: string;
+
     @Column({type: 'bigint', precision: 13})
     updateTime: number;
 

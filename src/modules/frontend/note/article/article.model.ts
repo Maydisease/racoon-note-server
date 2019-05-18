@@ -4,17 +4,17 @@ import {_User}            from '../../../../entities/user.entity';
 import {Connection, Like} from 'typeorm';
 
 interface ArticleUpdateParams {
-    title?: string,
-    uid?: string,
-    cid?: number,
-    markdown_content?: string,
-    html_content?: string,
-    updateTime?: string
+    title?: string;
+    uid?: string;
+    cid?: number;
+    markdown_content?: string;
+    html_content?: string;
+    updateTime?: string;
 }
 
 interface ArticleDisableStateParams {
-    disable: number,
-    updateTime: number
+    disable: number;
+    updateTime: number;
 }
 
 export class ArticleModel {
@@ -32,10 +32,10 @@ export class ArticleModel {
     getArticleData(cid: number, uid: string, disable: number) {
         return this.connection.getRepository(this.tableNoteArticle)
                    .createQueryBuilder()
-                   .where("cid = :cid", {cid: cid})
-                   .andWhere("uid = :uid", {uid: uid})
-                   .andWhere("disable = :disable", {disable: disable})
-                   .orderBy("id", "DESC")
+                   .where('cid = :cid', {cid})
+                   .andWhere('uid = :uid', {uid})
+                   .andWhere('disable = :disable', {disable})
+                   .orderBy('id', 'DESC')
                    .getMany();
     }
 
@@ -43,8 +43,8 @@ export class ArticleModel {
         return this.connection
                    .getRepository(this.tableNoteArticle)
                    .createQueryBuilder()
-                   .where("id = :id", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .getCount();
     }
 
@@ -53,7 +53,7 @@ export class ArticleModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("id = :cid", {cid: cid})
+                   .where('id = :cid', {cid})
                    .getCount();
     }
 
@@ -62,7 +62,7 @@ export class ArticleModel {
         return this.connection
                    .getRepository(this.tableUser)
                    .createQueryBuilder()
-                   .where("userId = :uid", {uid: uid})
+                   .where('userId = :uid', {uid})
                    .getCount();
     }
 
@@ -81,7 +81,7 @@ export class ArticleModel {
 
         const setBody: any = {
             uid       : params.uid,
-            updateTime: params.updateTime
+            updateTime: params.updateTime,
         };
 
         if (params.title) {
@@ -100,47 +100,45 @@ export class ArticleModel {
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
                    .set(setBody)
-                   .where("id = :id", {id: id})
+                   .where('id = :id', {id})
                    .execute();
-
-
     }
 
     public setArticleDisableState(id: number, uid: string, disable: number, updateTime: number) {
         const setBody: any = {
             disable,
-            updateTime
+            updateTime,
         };
 
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
                    .set(setBody)
-                   .where("id = :id", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 
     public setArticleLockState(id: number, uid: string, lock: number, updateTime: number) {
         const setBody: any = {
             lock,
-            updateTime
+            updateTime,
         };
 
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
                    .set(setBody)
-                   .where("id = :id", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 
     public getCategoryData(uid: string) {
         return this.connection.getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("uid = :uid", {uid: uid})
-                   .orderBy("id", "DESC")
+                   .where('uid = :uid', {uid})
+                   .orderBy('id', 'DESC')
                    .getMany();
     }
 
@@ -149,7 +147,7 @@ export class ArticleModel {
         const where = {
             uid,
             disable,
-            lock
+            lock,
         };
 
         where[type] = Like(`%${keys}%`);
@@ -157,6 +155,6 @@ export class ArticleModel {
         const order = {};
         order[type] = 'DESC';
 
-        return this.connection.getRepository(this.tableNoteArticle).find({where, order})
+        return this.connection.getRepository(this.tableNoteArticle).find({where, order});
     }
 }

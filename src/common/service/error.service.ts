@@ -1,16 +1,16 @@
 import {Injectable} from '@nestjs/common';
 
 enum EMessage {
-    'E1000'  = 'Data read failed',
-    'E1001'  = 'User does not exist',
-    'E1002'  = 'Category does not exist',
-    'E1003'  = 'Article does not exist',
-    'E1004'  = 'Username does not exist',
-    'E1005'  = 'Upload file error',
-    'E1006'  = 'Attached does not exist',
-    'E1007'  = 'Remove attached failed',
-    'E1008'  = 'Category length should be 1-18 characters',
-    'E1009'  = 'Invalid parent category',
+    'E1000' = 'Data read failed',
+    'E1001' = 'User does not exist',
+    'E1002' = 'Category does not exist',
+    'E1003' = 'Article does not exist',
+    'E1004' = 'Username does not exist',
+    'E1005' = 'Upload file error',
+    'E1006' = 'Attached does not exist',
+    'E1007' = 'Remove attached failed',
+    'E1008' = 'Category length should be 1-18 characters',
+    'E1009' = 'Invalid parent category',
     'E1010' = 'Category already exists',
     'E1011' = 'Category does not exist',
     'E1012' = 'Category id is an unsupported type',
@@ -23,9 +23,9 @@ enum EMessage {
     'E1019' = 'Password does not match the rule',
     'E1020' = 'Username and password do not match',
     'E1021' = 'The verification code does not match the account number.',
-    'E1022' = 'Verification code failed to be sent, please resend'
+    'E1022' = 'Verification code failed to be sent, please resend',
+    'E1023' = 'Icon does not exist',
 }
-
 
 // return this.echoService.fail(0 9001, "Data read failed");
 // return this.echoService.fail(1 1200, "user does not exist");

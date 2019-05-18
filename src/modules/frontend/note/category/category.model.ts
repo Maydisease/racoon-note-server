@@ -16,9 +16,9 @@ export class CategoryModel {
     getCategoryData(uid): Promise<object> {
         return this.connection.getRepository(this.tableNoteCategory).find(
             {
-                select: ["id", "name", "parent"],
-                where : [{uid}]
-            }
+                select: ['id', 'name', 'parent', 'iconText'],
+                where : [{uid}],
+            },
         );
     }
 
@@ -27,8 +27,8 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("uid = :uid", {uid: uid})
-                   .andWhere("id = :parent", {parent: parent})
+                   .where('uid = :uid', {uid})
+                   .andWhere('id = :parent', {parent})
                    .printSql()
                    .getCount();
     }
@@ -38,7 +38,7 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("id = :id", {id: id})
+                   .where('id = :id', {id})
                    .getCount();
     }
 
@@ -47,7 +47,7 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("parent = :id", {id: id})
+                   .where('parent = :id', {id})
                    .getCount();
     }
 
@@ -56,8 +56,8 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteArticle)
                    .createQueryBuilder()
-                   .where("cid = :id", {id: id})
-                   .andWhere("disable = :disable", {disable: 0})
+                   .where('cid = :id', {id})
+                   .andWhere('disable = :disable', {disable: 0})
                    .getCount();
     }
 
@@ -66,9 +66,9 @@ export class CategoryModel {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
-                   .where("binary name = :name", {name: name})
-                   .andWhere("uid = :uid", {uid: uid})
-                   .andWhere("parent = :parent", {parent: parent})
+                   .where('binary name = :name', {name})
+                   .andWhere('uid = :uid', {uid})
+                   .andWhere('parent = :parent', {parent})
                    .printSql()
                    .getCount();
     }
@@ -85,12 +85,12 @@ export class CategoryModel {
     }
 
     // 更改分类名
-    renameCategory(id: number, name: string, updatetime: number, uid: string): Promise<object> {
+    renameCategory(id: number, name: string, updateTime: number, uid: string): Promise<object> {
         return this.connection.createQueryBuilder()
                    .update(this.tableNoteCategory)
-                   .set({name: name, updateTime: updatetime})
-                   .where("id = :id", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .set({name, updateTime})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 
@@ -98,17 +98,26 @@ export class CategoryModel {
         return this.connection.createQueryBuilder()
                    .delete()
                    .from(this.tableNoteCategory)
-                   .where("id = :id", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 
-    removeMultipleCategory(id: Array<number>, uid: string): Promise<object> {
+    removeMultipleCategory(id: number[], uid: string): Promise<object> {
         return this.connection.createQueryBuilder()
                    .delete()
                    .from(this.tableNoteCategory)
-                   .where("id in(:...id)", {id: id})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id in(:...id)', {id})
+                   .andWhere('uid = :uid', {uid})
+                   .execute();
+    }
+
+    updateCategoryIcon(id: number, uid: string, iconText: string, updateTime: number) {
+        return this.connection.createQueryBuilder()
+                   .update(this.tableNoteCategory)
+                   .set({iconText, updateTime})
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 }

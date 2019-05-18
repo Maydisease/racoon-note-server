@@ -24,15 +24,15 @@ const publicKey  = fs.readFileSync(publicKeyPath);
 export default {
     PATH: {
         BASIC         : path.join(__dirname, '../../'),
-        ATTACHED_FILES: attachedFilesPath
+        ATTACHED_FILES: attachedFilesPath,
     },
     KEYS: {
         PRIVATE: privateKey,
-        PUBLIC : publicKey
+        PUBLIC : publicKey,
     },
     ASE : {
         KEY: '9vApxLk5G3PAsJrM',
-        IV : 'FnJL7EDzjqWjcaY9'
+        IV : 'FnJL7EDzjqWjcaY9',
     },
     DB  : {
         DB_TYPE    : process.env.DB_TYPE,
@@ -40,10 +40,10 @@ export default {
         DB_PORT    : process.env.DB_PORT,
         DB_DATABASE: process.env.DB_DATABASE,
         DB_USERNAME: process.env.DB_USERNAME,
-        DB_PASSWORD: process.env.DB_PASSWORD
+        DB_PASSWORD: process.env.DB_PASSWORD,
     },
     APP : {
         APP_RUN_HOST: process.env.APP_RUN_HOST,
-        APP_RUN_PORT: process.env.APP_RUN_PORT
+        APP_RUN_PORT: process.env.APP_RUN_PORT,
     }
 }

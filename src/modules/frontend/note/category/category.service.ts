@@ -18,19 +18,19 @@ export class CategoryService {
     }
 
     public async verifyCategoryParentExist(uid: string, parent: number): Promise<boolean> {
-        return await new CategoryModel(this.connection).verifyCategoryParentExist(uid, parent) >= 1
+        return await new CategoryModel(this.connection).verifyCategoryParentExist(uid, parent) >= 1;
     }
 
     public async verifyCategoryIdExist(id: number): Promise<boolean> {
-        return await new CategoryModel(this.connection).verifyCategoryIdExist(id) >= 1
+        return await new CategoryModel(this.connection).verifyCategoryIdExist(id) >= 1;
     }
 
     public async verifyCategoryExist(name: string, uid: string, parent: number): Promise<boolean> {
-        return await new CategoryModel(this.connection).verifyCategoryExist(name, uid, parent) >= 1
+        return await new CategoryModel(this.connection).verifyCategoryExist(name, uid, parent) >= 1;
     }
 
     public addCategoryData(params: object): Promise<object> {
-        return new CategoryModel(this.connection).addCategoryData(params)
+        return new CategoryModel(this.connection).addCategoryData(params);
     }
 
     public renameCategory(id: number, name: string, updatetime: number, uid: string): Promise<object> {
@@ -41,7 +41,7 @@ export class CategoryService {
         return new CategoryModel(this.connection).removeCategory(id, uid);
     }
 
-    public removeMultipleCategory(id: Array<number>, uid: string): Promise<object> {
+    public removeMultipleCategory(id: number[], uid: string): Promise<object> {
         return new CategoryModel(this.connection).removeMultipleCategory(id, uid);
     }
 
@@ -51,5 +51,9 @@ export class CategoryService {
 
     public async verifyExistArticle(id: number): Promise<boolean> {
         return await new CategoryModel(this.connection).verifyExistArticle(id) >= 1;
+    }
+
+    public updateCategoryIcon(id: number, uid: string, iconText: string, updateTime: number): Promise<object> {
+        return new CategoryModel(this.connection).updateCategoryIcon(id, uid, iconText, updateTime);
     }
 }

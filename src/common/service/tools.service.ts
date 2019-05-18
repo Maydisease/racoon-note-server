@@ -5,13 +5,9 @@ import CONFIG       from '../../config';
 @Injectable()
 export class ToolsService {
 
-    constructor() {
-
-    }
-
     // 过滤无用参数
     public filterInvalidParams(params: object): object {
-        for (let key in params) {
+        for (const key in params) {
             if (params[key] === undefined || params[key] === 'undefined' || params[key] === null || params[key] === '') {
                 delete params[key];
             }
@@ -47,13 +43,13 @@ export class ToolsService {
     // 用户OAuthToken加密
     public encodeUserToken(username: string, userId: string, password: string, inputTime: number, lastTime: number): string {
         const sourceStr: string = `${username}&${userId}&${password}&${inputTime}&${lastTime}`;
-        return <string>this.aesEncrypt(sourceStr);
+        return this.aesEncrypt(sourceStr);
     }
 
     // 用户OAuthToken解密
     public decodeUserToken(token): object | boolean {
         try {
-            let [username, userId, password, inputTime, lastTime] = this.aesDecrypt(token).split('&');
+            const [username, userId, password, inputTime, lastTime] = this.aesDecrypt(token).split('&');
             return {username, userId, password, inputTime, lastTime};
         } catch (e) {
             console.log(e);
@@ -79,7 +75,34 @@ export class ToolsService {
     public randomGenerator(digit: number, type: string | undefined = 'number') {
 
         let randomCode   = '';
-        const letterMaps = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        const letterMaps = [
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+        ];
 
         switch (type) {
             case 'number':

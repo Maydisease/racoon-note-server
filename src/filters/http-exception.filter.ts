@@ -1,6 +1,6 @@
 import {ArgumentsHost, Catch, ExceptionFilter, HttpException} from '@nestjs/common';
-import {EchoService}                                          from "../common/service/echo.service";
-import {ErrorService}                                          from "../common/service/error.service";
+import {EchoService}                                          from '../common/service/echo.service';
+import {ErrorService}                                         from '../common/service/error.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -9,12 +9,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     public errorService: ErrorService;
 
     constructor() {
-        this.echoService = new EchoService();
+        this.echoService  = new EchoService();
         this.errorService = new ErrorService();
     }
 
     catch(exception, host: ArgumentsHost) {
-        
+
         const ctx      = host.switchToHttp();
         const response = ctx.getResponse();
         const request  = ctx.getRequest();
@@ -30,7 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 .json({
                     statusCode: status,
                     date      : new Date().toLocaleDateString(),
-                    path      : request.url
+                    path      : request.url,
                 });
         }
 

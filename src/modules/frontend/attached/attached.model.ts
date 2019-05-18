@@ -2,17 +2,17 @@ import {_Attached}  from '../../../entities/attached.entity';
 import {Connection} from 'typeorm';
 
 interface ArticleUpdateParams {
-    title?: string,
-    uid?: string,
-    cid?: number,
-    markdown_content?: string,
-    html_content?: string,
-    updateTime?: string
+    title?: string;
+    uid?: string;
+    cid?: number;
+    markdown_content?: string;
+    html_content?: string;
+    updateTime?: string;
 }
 
 interface ArticleDisableStateParams {
-    disable: number,
-    updateTime: number
+    disable: number;
+    updateTime: number;
 }
 
 export class AttachedModel {
@@ -27,8 +27,8 @@ export class AttachedModel {
     getAttached(uid: string) {
         return this.connection.getRepository(this.tableAttached)
                    .createQueryBuilder()
-                   .andWhere("uid = :uid", {uid: uid})
-                   .orderBy("id", "DESC")
+                   .andWhere('uid = :uid', {uid})
+                   .orderBy('id', 'DESC')
                    .getMany();
     }
 
@@ -36,7 +36,7 @@ export class AttachedModel {
     getAttachedType(id: number) {
         return this.connection.getRepository(this.tableAttached)
                    .createQueryBuilder()
-                   .andWhere("id = :id", {id: id})
+                   .andWhere('id = :id', {id})
                    .getOne();
     }
 
@@ -51,12 +51,12 @@ export class AttachedModel {
     }
 
     // 删除附件
-    removeAttached(ids: Array<number>, uid: string): Promise<object> {
+    removeAttached(ids: number[], uid: string): Promise<object> {
         return this.connection.createQueryBuilder()
                    .delete()
                    .from(this.tableAttached)
-                   .where("id in(:...id)", {id: ids})
-                   .andWhere("uid = :uid", {uid: uid})
+                   .where('id in(:...id)', {id: ids})
+                   .andWhere('uid = :uid', {uid})
                    .execute();
     }
 }

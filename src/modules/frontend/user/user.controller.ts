@@ -1,23 +1,23 @@
 import {Body, Controller, Headers, Inject, Post, UseGuards} from '@nestjs/common';
-import {storeService}                                       from "../../../common/service/store.service";
+import {storeService}                                       from '../../../common/service/store.service';
 
-interface addUserDataBody {
-    username: string,
-    password: string,
-    options: object | '',
-    updateTime: number,
-    inputTime: number,
-    userId?: string
+interface AddUserDataBody {
+    username: string;
+    password: string;
+    options: object | '';
+    updateTime: number;
+    inputTime: number;
+    userId?: string;
 }
 
-interface verifySignStateBody {
-    token: string
+interface VerifySignStateBody {
+    token: string;
 }
 
-interface signInBody {
-    username: string,
-    password: string,
-    lastTime: number
+interface SignInBody {
+    username: string;
+    password: string;
+    lastTime: number;
 }
 
 @UseGuards()
@@ -31,7 +31,7 @@ export class UserController {
         @Inject('userService') public userService,
         @Inject('echoService') public echoService,
         @Inject('mailService') public mailService,
-        @Inject('errorService') public errorService
+        @Inject('errorService') public errorService,
     ) {
         this.forgetPasswordCodeTimer = false;
     }
@@ -39,6 +39,7 @@ export class UserController {
     // 获取分类数据
     @Post('getUserData')
     async getUserData(@Body() body) {
+        console.log('null');
     }
 
     // 异步验证状态
@@ -46,7 +47,7 @@ export class UserController {
     async asyncVerifyUser(@Body() body): Promise<object> {
 
         const params = {
-            username: String(body.username || '')
+            username: String(body.username || ''),
         };
 
         // 用户存在
@@ -62,7 +63,7 @@ export class UserController {
     async verifyUserExist(@Body() body): Promise<object> {
 
         const params = {
-            username: String(body.username || '')
+            username: String(body.username || ''),
         };
 
         // 用户名已被占用
@@ -79,12 +80,12 @@ export class UserController {
 
         // 格式化数据
         const timestamp               = new Date().getTime();
-        const params: addUserDataBody = this.toolsService.filterInvalidParams({
+        const params: AddUserDataBody = this.toolsService.filterInvalidParams({
             username  : String(body.username),
             password  : String(body.password),
             options   : '',
             updateTime: timestamp,
-            inputTime : timestamp
+            inputTime : timestamp,
         });
 
         // 账号不符合邮箱规则
@@ -119,10 +120,10 @@ export class UserController {
 
         // 格式化数据
         const timestamp          = new Date().getTime();
-        const params: signInBody = this.toolsService.filterInvalidParams({
+        const params: SignInBody = this.toolsService.filterInvalidParams({
             username: String(body.username),
             password: String(body.password),
-            lastTime: timestamp
+            lastTime: timestamp,
         });
 
         // 用户名不存在
@@ -144,7 +145,7 @@ export class UserController {
             await this.userService.updateLastTime(response[0].userId, params.lastTime);
             const responseBody = Object.assign({
                 token        : getUserToken,
-                private_space: this.toolsService.getMD5(response[0].userId)
+                private_space: this.toolsService.getMD5(response[0].userId),
             }, response[0]);
 
             return this.echoService.success(responseBody);
@@ -174,7 +175,7 @@ export class UserController {
             username : String(userParams.username),
             userId   : String(userParams.userId),
             password : String(userParams.password),
-            inputTime: Number(userParams.inputTime)
+            inputTime: Number(userParams.inputTime),
         });
 
         const response = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
@@ -236,11 +237,11 @@ export class UserController {
 
         const timestamp = new Date().getTime();
         const params    = this.toolsService.filterInvalidParams({
-            username: String(body.username)
+            username: String(body.username),
         });
 
         // if (this.forgetPasswordCodeTimer) {
-        //     return this.echoService.fail(1203, "verification code is being sent");
+        //     return this.echoService.fail(1203, 'verification code is being sent');
         // } else {
         //     this.forgetPasswordCodeTimer = true;
         // }
@@ -261,7 +262,7 @@ export class UserController {
             to     : params.username,
             subject: `racoon note 找回登录密码 ✔ 验证码：${randomCode}`,
             text   : `您使用了 racoon note 提供的找回登录密码服务，验证码是：${randomCode} 请勿泄露给其他人`,
-            html   : `<b>您使用了 racoon note 提供的找回登录密码服务，验证码是：<em style="color: red">${randomCode}</em> 请勿泄露给其他人</b>`
+            html   : `<b>您使用了 racoon note 提供的找回登录密码服务，验证码是：<em style='color: red'>${randomCode}</em> 请勿泄露给其他人</b>`,
         };
 
         const sendMailResponse       = await this.mailService.send(mailOptions);
@@ -270,7 +271,7 @@ export class UserController {
         if (sendMailResponse.messageId) {
             const forgetPasswordCodeBody = {
                 username  : params.username,
-                expireDate: timestamp + 30000
+                expireDate: timestamp + 30000,
             };
             storeService.put('forgetPasswordCode', randomCode, forgetPasswordCodeBody);
             return this.echoService.success();
@@ -283,7 +284,7 @@ export class UserController {
     // 删除数据
     @Post('removeUserData')
     removeUserData() {
-        return 'removeUserData'
+        return 'removeUserData';
     }
 
 }

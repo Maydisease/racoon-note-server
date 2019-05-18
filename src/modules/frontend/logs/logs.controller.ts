@@ -4,7 +4,7 @@ import {Body, Controller, Headers, Inject, Post, UseGuards} from '@nestjs/common
 export class LogsController {
 
     constructor(
-        @Inject('echoService') public echoService
+        @Inject('echoService') public echoService,
     ) {
     }
 

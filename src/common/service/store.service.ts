@@ -1,12 +1,12 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable} from '@nestjs/common';
 
 type storeKeyType = 'forgetPasswordCode';
 
 interface ForgetPasswordCode {
     'number': {
         username: string
-        expireDate: number
-    }
+        expireDate: number;
+    };
 }
 
 @Injectable()
@@ -29,4 +29,4 @@ class StoreService {
 
 const storeService = new StoreService();
 
-export {storeService}
+export {storeService};
