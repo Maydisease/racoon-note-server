@@ -5,6 +5,8 @@ interface AddCategoryDataBody {
     uid: string;
     parent: number;
     count: number;
+    iconText: string;
+    iconColor: string;
     updateTime: number;
     inputTime: number;
 }
@@ -69,6 +71,8 @@ export class CategoryController {
             uid       : String(req.userInfo.userId),
             parent    : Number(body.parent) || 0,
             count     : 0,
+            iconText  : 'folder',
+            iconColor : 'default',
             updateTime: timestamp,
             inputTime : timestamp,
         });
