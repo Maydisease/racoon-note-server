@@ -33,7 +33,7 @@ export class AttachedModel {
     }
 
     // 获取附件类型
-    getAttachedType(id: number) {
+    getAttachedType(id: number): Promise<any> {
         return this.connection.getRepository(this.tableAttached)
                    .createQueryBuilder()
                    .andWhere('id = :id', {id})

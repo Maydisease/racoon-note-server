@@ -56,10 +56,11 @@ export class UserModel {
     }
 
     updateLastTime(userId: string, lastTime: number) {
+        const body: any = {lastTime};
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableUser)
-                   .set({lastTime})
+                   .set(body)
                    .where('userId = :userId', {userId})
                    .execute();
     }

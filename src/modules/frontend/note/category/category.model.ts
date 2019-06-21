@@ -86,9 +86,12 @@ export class CategoryModel {
 
     // 更改分类名
     renameCategory(id: number, name: string, updateTime: number, uid: string): Promise<object> {
+
+        const body: any = {name, updateTime};
+
         return this.connection.createQueryBuilder()
                    .update(this.tableNoteCategory)
-                   .set({name, updateTime})
+                   .set(body)
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();
@@ -113,9 +116,10 @@ export class CategoryModel {
     }
 
     updateCategoryIcon(id: number, uid: string, iconText: string, updateTime: number) {
+        const body: any = {iconText, updateTime};
         return this.connection.createQueryBuilder()
                    .update(this.tableNoteCategory)
-                   .set({iconText, updateTime})
+                   .set(body)
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();

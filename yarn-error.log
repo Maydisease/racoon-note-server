@@ -1,0 +1,100 @@
+Arguments: 
+  /Users/tandongs/.nvm/versions/node/v10.15.3/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js
+
+PATH: 
+  /Users/tandongs/.deno/bin:/usr/local/opt/redis@4.0/bin:/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home/bin:/Users/tandongs/.nvm/versions/node/v10.15.3/bin:/usr/local/opt/redis@4.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Users/tandongs/Soft/flutter/bin:/usr/local/Cellar/tomcat/9.0.19/bin:/Users/tandongs/Soft/apache-ant-1.10.5/bin
+
+Yarn version: 
+  1.15.2
+
+Node version: 
+  10.15.3
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.npm.taobao.org registry.npm.taobao.org:443
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)
+
+npm manifest: 
+  {
+  	"name": "nest",
+  	"version": "0.0.0",
+  	"description": "description",
+  	"author": "",
+  	"license": "MIT",
+  	"scripts": {
+  		"build": "tsc -p tsconfig.build.json",
+  		"format": "prettier --write \"src/**/*.ts\"",
+  		"start": "ts-node -r tsconfig-paths/register src/main.ts",
+  		"start:dev": "nodemon",
+  		"start:debug": "nodemon --config nodemon-debug.json",
+  		"build:prod": "rimraf dist && tsc",
+  		"start:prod": "node -r dotenv/config dist/src/main.js dotenv_config_path=./env/production.env",
+  		"lint": "tslint -p tsconfig.json -c tslint.json",
+  		"test": "jest --verbose --forceExit --detectOpenHandles",
+  		"test:watch": "jest --watch",
+  		"test:cov": "jest --coverage",
+  		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+  		"test:e2e": "jest --config ./test/jest-e2e.json"
+  	},
+  	"dependencies": {
+  		"@nestjs/common": "^5.4.0",
+  		"@nestjs/core": "^5.4.0",
+  		"@nestjs/typeorm": "^5.2.2",
+  		"@types/dotenv": "^6.1.0",
+  		"@types/markdown-it": "0.0.7",
+  		"dotenv": "^6.2.0",
+  		"markdown-it": "^8.4.2",
+  		"mysql": "^2.16.0",
+  		"nodemailer": "^5.1.1",
+  		"reflect-metadata": "^0.1.12",
+  		"rimraf": "^2.6.2",
+  		"rxjs": "^6.2.2",
+  		"typeorm": "^0.2.9",
+  		"typescript": "^3.0.1"
+  	},
+  	"devDependencies": {
+  		"@nestjs/testing": "^5.1.0",
+  		"@types/express": "^4.16.0",
+  		"@types/jest": "^23.3.1",
+  		"@types/node": "^10.12.18",
+  		"@types/prismjs": "^1.9.1",
+  		"@types/supertest": "^2.0.5",
+  		"crypto": "^1.0.1",
+  		"jest": "^23.5.0",
+  		"markdown-it-imsize": "^2.0.1",
+  		"markdown-it-mermaid": "^0.2.5",
+  		"mermaid": "^7.1.2",
+  		"nodemon": "^1.18.3",
+  		"prettier": "^1.14.2",
+  		"prismjs": "^1.15.0",
+  		"supertest": "^3.1.0",
+  		"ts-jest": "^23.1.3",
+  		"ts-loader": "^4.4.2",
+  		"ts-node": "^7.0.1",
+  		"tsconfig-paths": "^3.5.0",
+  		"tslint": "5.11.0"
+  	},
+  	"jest": {
+  		"moduleFileExtensions": [
+  			"js",
+  			"json",
+  			"ts"
+  		],
+  		"rootDir": "src",
+  		"testRegex": ".spec.ts$",
+  		"transform": {
+  			"^.+\\.(t|j)s$": "ts-jest"
+  		},
+  		"coverageDirectory": "../coverage",
+  		"testEnvironment": "node"
+  	}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
