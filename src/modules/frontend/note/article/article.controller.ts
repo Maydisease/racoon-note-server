@@ -19,6 +19,8 @@ import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-textile';
+import 'prismjs/components/prism-dart';
+import 'prismjs/components/prism-yaml';
 
 const markdownItMermaid = require('markdown-it-mermaid').default;
 const markdownItImsize  = require('markdown-it-imsize');
