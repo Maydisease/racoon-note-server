@@ -9,6 +9,7 @@ interface ArticleUpdateParams {
     cid?: number;
     markdown_content?: string;
     html_content?: string;
+    description?: string;
     updateTime?: string;
 }
 
@@ -42,7 +43,7 @@ export class ArticleModel {
     getArticleList(cid: number, uid: string, disable: number) {
         return this.connection.getRepository(this.tableNoteArticle).find(
             {
-                select: ['id', 'cid', 'title', 'html_content', 'lock', 'updateTime'],
+                select: ['id', 'cid', 'title', 'description', 'lock', 'updateTime'],
                 where : [{cid, uid, disable}],
                 order : {
                     id: "DESC"
@@ -107,6 +108,10 @@ export class ArticleModel {
 
         if (params.markdown_content) {
             setBody.html_content = params.html_content;
+        }
+
+        if (params.description) {
+            setBody.description = params.description;
         }
 
         return this.connection

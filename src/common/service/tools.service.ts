@@ -72,6 +72,12 @@ export class ToolsService {
         return sourceStr;
     }
 
+    // 生成文章摘要
+    public buildArticleDes(html: string, maxLength: number = 50): string {
+        let des         = html ? this.removeHtmlTag(html) : '';
+        return des.length > maxLength ? des.substring(0, maxLength) + '...' : des;
+    }
+
     public randomGenerator(digit: number, type: string | undefined = 'number') {
 
         let randomCode   = '';

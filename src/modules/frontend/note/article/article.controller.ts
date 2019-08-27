@@ -33,6 +33,7 @@ interface AddArticleDataBody {
     cid: number;
     markdown_content?: string;
     html_content?: string;
+    description?: string;
     updateTime?: number;
     inputTime?: number;
 }
@@ -43,6 +44,7 @@ interface UpdateArticleDataBody {
     uid?: string;
     markdown_content?: string;
     html_content?: string;
+    description?: string;
     updateTime: number;
 }
 
@@ -124,13 +126,6 @@ export class ArticleController {
             return this.echoService.fail(9001);
         }
 
-        response.forEach((item, index: number) => {
-            const maxLength             = 50;
-            let des                     = item.html_content ? this.toolsService.removeHtmlTag(item.html_content) : '';
-            des                         = des.length > maxLength ? des.substring(0, maxLength) + '...' : des;
-            response[index].description = des;
-        });
-
         return this.echoService.success(response);
     }
 
@@ -178,6 +173,10 @@ export class ArticleController {
             return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
+        if (params.html_content) {
+            params.description = this.toolsService.buildArticleDes(params.html_content);
+        }
+
         const response: any = await this.articleService.addArticleData(params);
 
         // 判断数据是否正常插入到了article表
@@ -205,6 +204,10 @@ export class ArticleController {
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
             return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        if (params.html_content) {
+            params.description = this.toolsService.buildArticleDes(params.html_content);
         }
 
         const response: any = await this.articleService.updateArticleData(params.id, params);
