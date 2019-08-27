@@ -46,10 +46,15 @@ interface UpdateArticleDataBody {
     updateTime: number;
 }
 
-interface GetArticleData {
+interface GetArticleList {
     cid: number;
     uid: string;
     disable: number;
+}
+
+interface GetArticleData {
+    id: number;
+    uid: string;
 }
 
 interface SetArticleDisableStateBody {
@@ -103,16 +108,16 @@ export class ArticleController {
             .use(markdownItImsize);
     }
 
-    // 获取分类数据
-    @Post('getArticleData')
-    async getArticleData(@Body() body, @Request() req) {
-        const params: GetArticleData = this.toolsService.filterInvalidParams({
+    // 获取文章列表
+    @Post('getArticleList')
+    async getArticleList(@Body() body, @Request() req) {
+        const params: GetArticleList = this.toolsService.filterInvalidParams({
             cid    : Number(body.cid),
             uid    : String(req.userInfo.userId),
             disable: 0,
         });
 
-        const response: any = await this.articleService.getArticleData(params.cid, params.uid, params.disable);
+        const response: any = await this.articleService.getArticleList(params.cid, params.uid, params.disable);
 
         // 判断数据是否正常取出了
         if (!response) {
@@ -125,6 +130,24 @@ export class ArticleController {
             des                         = des.length > maxLength ? des.substring(0, maxLength) + '...' : des;
             response[index].description = des;
         });
+
+        return this.echoService.success(response);
+    }
+
+    // 获取文章详情
+    @Post('getArticleData')
+    async getArticleData(@Body() body, @Request() req) {
+        const params: GetArticleData = this.toolsService.filterInvalidParams({
+            id : Number(body.id),
+            uid: String(req.userInfo.userId)
+        });
+
+        const response: any = await this.articleService.getArticleData(params.id, params.uid);
+
+        // 判断数据是否正常取出了
+        if (!response) {
+            return this.echoService.fail(9001);
+        }
 
         return this.echoService.success(response);
     }

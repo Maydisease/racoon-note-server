@@ -31,8 +31,12 @@ export class ArticleService {
         return new ArticleModel(this.connection).updateArticleData(id, params);
     }
 
-    public getArticleData(cid: number, uid: string, disable: number) {
-        return new ArticleModel(this.connection).getArticleData(cid, uid, disable);
+    public getArticleList(cid: number, uid: string, disable: number) {
+        return new ArticleModel(this.connection).getArticleList(cid, uid, disable);
+    }
+
+    public getArticleData(id: number, uid: string) {
+        return new ArticleModel(this.connection).getArticleData(id, uid);
     }
 
     public setArticleDisableState(id: number, uid: string, disable: number, updateTime: number) {

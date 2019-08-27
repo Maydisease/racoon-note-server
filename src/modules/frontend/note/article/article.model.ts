@@ -29,16 +29,29 @@ export class ArticleModel {
         this.tableUser         = _User;
     }
 
-    getArticleData(cid: number, uid: string, disable: number) {
-        return this.connection.getRepository(this.tableNoteArticle)
-                   .createQueryBuilder()
-                   .where('cid = :cid', {cid})
-                   .andWhere('uid = :uid', {uid})
-                   .andWhere('disable = :disable', {disable})
-                   .orderBy('id', 'DESC')
-                   .getMany();
+    // 获取文章详情
+    getArticleData(id: number, uid: string) {
+        return this.connection.getRepository(this.tableNoteArticle).findOne(
+            {
+                where: [{id, uid}]
+            }
+        );
     }
 
+    // 获取文章列表
+    getArticleList(cid: number, uid: string, disable: number) {
+        return this.connection.getRepository(this.tableNoteArticle).find(
+            {
+                select: ['id', 'cid', 'title', 'html_content', 'lock', 'updateTime'],
+                where : [{cid, uid, disable}],
+                order : {
+                    id: "DESC"
+                }
+            }
+        );
+    }
+
+    // 验证问政是否存在
     verifyArticleExist(id: number, uid: string) {
         return this.connection
                    .getRepository(this.tableNoteArticle)
