@@ -27,8 +27,16 @@ export class ArticleService {
         return new ArticleModel(this.connection).addArticleData(params);
     }
 
-    public updateArticleData(id: number, params: object) {
+    public updateArticleData(id: number, params: object): Promise<object> {
         return new ArticleModel(this.connection).updateArticleData(id, params);
+    }
+
+    public updateArticleShareConf(id: number, params: object): Promise<object> {
+        return new ArticleModel(this.connection).updateArticleShareConf(id, params);
+    }
+
+    public updateArticleShareCode(id: number, params: object): Promise<object> {
+        return new ArticleModel(this.connection).updateArticleShareCode(id, params);
     }
 
     public getArticleList(cid: number, uid: string, disable: number) {

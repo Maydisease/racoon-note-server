@@ -13,6 +13,21 @@ interface ArticleUpdateParams {
     updateTime?: string;
 }
 
+interface ArticleShareConfUpdateParams {
+    id?: number;
+    uid?: string;
+    on_share?: number;
+    use_share_code?: number;
+    updateTime: number;
+}
+
+interface ArticleShareCodeUpdateParams {
+    id?: number;
+    uid?: string;
+    share_code: string;
+    updateTime: number;
+}
+
 interface ArticleDisableStateParams {
     disable: number;
     updateTime: number;
@@ -43,7 +58,7 @@ export class ArticleModel {
     getArticleList(cid: number, uid: string, disable: number) {
         return this.connection.getRepository(this.tableNoteArticle).find(
             {
-                select: ['id', 'cid', 'title', 'description', 'lock', 'updateTime'],
+                select: ['id', 'cid', 'title', 'description', 'lock', 'on_share', 'use_share_code', 'share_code', 'updateTime'],
                 where : [{cid, uid, disable}],
                 order : {
                     id: "DESC"
@@ -121,6 +136,44 @@ export class ArticleModel {
                    .where('id = :id', {id})
                    .execute();
     }
+
+    public updateArticleShareConf(id: number, params: any) {
+
+        const setBody: any = {
+            uid       : params.uid,
+            updateTime: params.updateTime
+        };
+
+        if (params.on_share === 0 || params.on_share === 1) {
+            setBody.on_share = params.on_share;
+        }
+
+        if (params.use_share_code === 0 || params.use_share_code === 1) {
+            setBody.use_share_code = params.use_share_code;
+        }
+
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableNoteArticle)
+                   .set(setBody)
+                   .where('id = :id', {id})
+                   .execute();
+    }
+
+    public updateArticleShareCode(id: number, params: any){
+        const setBody: any = {
+            share_code: params.share_code,
+            updateTime: params.updateTime
+        };
+
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableNoteArticle)
+                   .set(setBody)
+                   .where('id = :id', {id})
+                   .execute();
+    }
+
 
     public setArticleDisableState(id: number, uid: string, disable: number, updateTime: number) {
         const setBody: any = {

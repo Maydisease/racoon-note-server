@@ -26,6 +26,15 @@ export class _NoteArticle {
     @Column({type: 'int', default: 0})
     lock: number;
 
+    @Column({type: 'varchar', length: 6})
+    share_code: string;
+
+    @Column({type: 'int', default: 0})
+    on_share: number;
+
+    @Column({type: 'int', default: 0})
+    use_share_code: number;
+
     @Column({type: 'int', default: 0})
     disable: number;
 

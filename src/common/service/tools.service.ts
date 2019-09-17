@@ -6,7 +6,7 @@ import CONFIG       from '../../config';
 export class ToolsService {
 
     // 过滤无用参数
-    public filterInvalidParams(params: object): object {
+    public filterInvalidParams(params: any): any {
         for (const key in params) {
             if (params[key] === undefined || params[key] === 'undefined' || params[key] === null || params[key] === '') {
                 delete params[key];
@@ -34,7 +34,7 @@ export class ToolsService {
     }
 
     // 字符串转MD5
-    private getMD5(content: string): string {
+    public getMD5(content: string): string {
         const md5    = crypto.createHash('md5');
         const md5Str = md5.update(content).digest('hex');
         return md5Str.substring(0);
@@ -78,7 +78,7 @@ export class ToolsService {
         return des.length > maxLength ? des.substring(0, maxLength) + '...' : des;
     }
 
-    public randomGenerator(digit: number, type: string | undefined = 'number') {
+    public randomGenerator(digit: number, type: 'string' | 'mix' | 'number') {
 
         let randomCode   = '';
         const letterMaps = [
@@ -120,6 +120,23 @@ export class ToolsService {
                 for (let i = 0; i < digit; i++) {
                     const key = Math.ceil(Math.random() * 25);
                     randomCode += letterMaps[key];
+                }
+                break;
+            case 'mix':
+                for (let i = 0; i < digit; i++) {
+
+                    const randomType = Math.floor(Math.random()*2);
+
+                    switch (randomType) {
+                        case 0:
+                            randomCode += Math.ceil(Math.random() * 9) + '';
+                            break;
+                        case 1:
+                            const key = Math.ceil(Math.random() * 25);
+                            randomCode += letterMaps[key];
+                            break;
+                    }
+
                 }
                 break;
         }

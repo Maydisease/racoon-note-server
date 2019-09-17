@@ -1,6 +1,8 @@
 import * as MarkdownIt                           from 'markdown-it';
 import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 import {ArticleService}                          from './article.service';
+import conf from '../../../../config';
+import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-javascript';
@@ -34,6 +36,9 @@ interface AddArticleDataBody {
     markdown_content?: string;
     html_content?: string;
     description?: string;
+    share_code?: string;
+    on_share?: number;
+    use_share_code?: number;
     updateTime?: number;
     inputTime?: number;
 }
@@ -45,6 +50,23 @@ interface UpdateArticleDataBody {
     markdown_content?: string;
     html_content?: string;
     description?: string;
+    share_code?: string;
+    on_share?: number;
+    use_share_code?: number;
+    updateTime: number;
+}
+
+interface UpdateArticleShareConfBody {
+    id: number;
+    uid?: string;
+    on_share?: number;
+    use_share_code?: number;
+}
+
+interface UpdateArticleShareCodeBody {
+    id: number;
+    uid?: string;
+    share_code: string;
     updateTime: number;
 }
 
@@ -80,7 +102,7 @@ export class ArticleController {
     public markdownIt: MarkdownIt;
 
     constructor(
-        @Inject('toolsService') public toolsService,
+        @Inject('toolsService') public toolsService: ToolsService,
         @Inject('echoService') public echoService,
         @Inject('userService') public userService,
         @Inject('errorService') public errorService,
@@ -119,11 +141,18 @@ export class ArticleController {
             disable: 0,
         });
 
-        const response: any = await this.articleService.getArticleList(params.cid, params.uid, params.disable);
+        let response: any = await this.articleService.getArticleList(params.cid, params.uid, params.disable);
 
         // 判断数据是否正常取出了
         if (!response) {
             return this.echoService.fail(9001);
+        }
+
+        if (response.length > 0) {
+            response.forEach((item: any, index: number) => {
+                const id           = this.toolsService.aesEncrypt(`${item.id}&${item.userId}`);
+                item.share_address = `/share?type=note&id=${id}`;
+            });
         }
 
         return this.echoService.success(response);
@@ -158,9 +187,12 @@ export class ArticleController {
             cid             : Number(body.cid),
             markdown_content: String(body.markdown_content),
             html_content    : String(body.markdown_content ? this.markdownIt.render(body.markdown_content) : ''),
+            on_share        : 0,
+            use_share_code  : 0,
+            share_code      : String(this.toolsService.randomGenerator(6, 'mix')),
             disable         : 0,
             updateTime      : timestamp,
-            inputTime       : timestamp,
+            inputTime       : timestamp
         });
 
         // 判断当前uid是否是有效的用户
@@ -183,6 +215,64 @@ export class ArticleController {
         if (!(response && response.raw.insertId > 0)) {
             return this.echoService.fail(1000, this.errorService.error.E1000);
         }
+
+        return this.echoService.success(response);
+
+    }
+
+    @Post('updateArticleShareCode')
+    async updateArticleShareCode(@Body() body: UpdateArticleShareCodeBody, @Request() req): Promise<object> {
+        const timestamp                          = new Date().getTime();
+        const shareCode                          = String(this.toolsService.randomGenerator(6, 'mix'));
+        const params: UpdateArticleShareCodeBody = this.toolsService.filterInvalidParams({
+            id        : Number(body.id),
+            uid       : String(req.userInfo.userId),
+            share_code: shareCode,
+            updateTime: timestamp
+        });
+
+        // 判断当前id是否是有效的文章
+        if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
+            return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        const response: any = await this.articleService.updateArticleShareCode(params.id, params);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.changedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        response.shareCode = shareCode;
+
+        return this.echoService.success(response);
+
+    }
+
+    @Post('updateArticleShareConf')
+    async updateArticleShareConf(@Body() body: UpdateArticleShareConfBody, @Request() req): Promise<object> {
+        const timestamp                          = new Date().getTime();
+        const params: UpdateArticleShareConfBody = this.toolsService.filterInvalidParams({
+            id            : Number(body.id),
+            uid           : String(req.userInfo.userId),
+            on_share      : Number(body.on_share),
+            use_share_code: Number(body.use_share_code),
+            updateTime    : timestamp,
+        });
+
+        // 判断当前id是否是有效的文章
+        if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
+            return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        const response: any = await this.articleService.updateArticleShareConf(params.id, params);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.changedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        console.log(params);
 
         return this.echoService.success(response);
 
