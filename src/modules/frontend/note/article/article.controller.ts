@@ -1,7 +1,7 @@
 import * as MarkdownIt                           from 'markdown-it';
 import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 import {ArticleService}                          from './article.service';
-import conf from '../../../../config';
+import conf                                      from '../../../../config';
 import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
@@ -148,10 +148,12 @@ export class ArticleController {
             return this.echoService.fail(9001);
         }
 
+        console.log(params.uid);
+
         if (response.length > 0) {
             response.forEach((item: any, index: number) => {
-                const id           = this.toolsService.aesEncrypt(`${item.id}&${item.userId}`);
-                item.share_address = `/share?type=note&id=${id}`;
+                const id           = this.toolsService.aesEncrypt(`${item.id}&${params.uid}`);
+                item.share_address = `/share/note?id=${id}`;
             });
         }
 

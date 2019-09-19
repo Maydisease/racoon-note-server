@@ -1,0 +1,221 @@
+$windowBackgroundColor: RGBA(247, 247, 247, 1);
+$wrapBackgroundColor: #FFFFFF;
+$wrapBoxShadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+$defaultFontColor: #666666;
+$titleFontColor: #000000;
+$stressFontColor: #000000;
+$borderColor: #CCCCCC;
+$describeFontColor: #999999;
+$describeFontColor2: #CCCCCC;
+$activeFontColor: #07a;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Helvetica, Tahoma, Arial, "Microsoft YaHei", 微软雅黑, 黑体, Heiti, sans-serif, SimSun, 宋体, serif;
+}
+
+html, body {
+    width: 100%;
+    position: relative;
+}
+
+textarea, input {
+    outline: none;
+}
+
+html {
+    background: $windowBackgroundColor;
+}
+
+.container {
+    width: 100%;
+    padding-top: 40px;
+    position: relative;
+    
+    .not-found {
+        margin: 0 auto;
+        width: 800px;
+        padding: 40px;
+        box-sizing: border-box;
+        font-size: 24px;
+        font-weight: bold;
+        color: $stressFontColor;
+    }
+    
+    .input-share-code {
+        position: absolute;
+        left: 50%;
+        margin-top: 100px;
+        transform: translateX(-50%);
+        text-align: center;
+        background: #FFF;
+        padding: 25px 30px;
+        border-radius: 5px;
+        box-shadow: $wrapBoxShadow;
+        -webkit-animation: inputShareCodeIn ease-in 1s forwards;
+        
+        @keyframes inputShareCodeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        
+        &[data-hide = true] {
+            display: none;
+        }
+        
+        p {
+            height: 35px;
+            line-height: 35px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: $stressFontColor;
+        }
+        
+        input {
+            width: 220px;
+            height: 30px;
+            line-height: 28px;
+            display: inline-block;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 14px;
+            background: #FCFCFC;
+            border-radius: 3px;
+            color: $activeFontColor;
+            border: 1px solid $borderColor;
+            
+            &::placeholder {
+                color: $describeFontColor2;
+                font-size: 12px;
+            }
+        }
+    }
+    
+    .wrap {
+        min-height: 900px;
+        margin: 0 auto;
+        min-width: 800px;
+        max-width: 800px;
+        width: 800px;
+        padding: 50px;
+        box-sizing: border-box;
+        background: $wrapBackgroundColor;
+        box-shadow: $wrapBoxShadow;
+        
+        &[data-hide='true'] {
+            display: none;
+        }
+        
+        h1.title {
+            width: 100%;
+            text-align: center;
+            color: $titleFontColor;
+            font-size: 28px;
+            
+        }
+        
+        .article-info {
+            width: 100%;
+            margin-bottom: 60px;
+            color: $describeFontColor;
+            text-align: center;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+        
+        .content {
+            h1, h2, h3, h4, h5, h6 {
+                width: 100%;
+                padding: 10px 0;
+                color: $stressFontColor;
+            }
+            
+            h6 {
+                font-size: 14px;
+            }
+            
+            h5 {
+                font-size: 16px;
+            }
+            
+            h4 {
+                font-size: 18px;
+            }
+            
+            h3 {
+                font-size: 20px;
+            }
+            
+            h2 {
+                font-size: 22px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            p {
+                line-height: 1.5;
+                color: $defaultFontColor;
+            }
+            
+            p, li, ol {
+                font-size: 14px;
+            }
+            
+            ul, li, ol {
+                list-style: none;
+            }
+            
+            p, ul, ol {
+                width: 100%;
+                padding-bottom: 20px;
+            }
+            
+            pre {
+                width: 100%;
+                padding: 15px 20px;
+                box-sizing: border-box;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            
+            img {
+                max-width: 100%;
+            }
+            
+            table {
+                font-size: 14px;
+                border-width: 1px;
+                border-color: $borderColor;
+                border-collapse: collapse;
+                
+                th {
+                    background: #f5f2f0;
+                    border-width: 1px;
+                    padding: 8px;
+                    border-style: solid;
+                    border-color: $borderColor;
+                }
+                
+                td {
+                    border-width: 1px;
+                    padding: 8px;
+                    border-style: solid;
+                    border-color: $borderColor;
+                    
+                }
+            }
+            
+        }
+        
+    }
+}

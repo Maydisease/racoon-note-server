@@ -20,6 +20,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const request  = ctx.getRequest();
         const status   = exception.getStatus();
 
+        console.log(status, request.url);
+
         // 捕捉守卫抛出的错误
         if (status === 1015) {
             const errBody = this.echoService.fail(1015, this.errorService.error.E1015);

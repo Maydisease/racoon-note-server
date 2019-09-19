@@ -25,6 +25,7 @@ enum EMessage {
     'E1021' = 'The verification code does not match the account number.',
     'E1022' = 'Verification code failed to be sent, please resend',
     'E1023' = 'Icon does not exist',
+    'E1024' = 'Incorrect sharing code'
 }
 
 // return this.echoService.fail(0 9001, "Data read failed");

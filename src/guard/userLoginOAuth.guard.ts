@@ -14,7 +14,7 @@ export class UserLoginOAuthGuard implements CanActivate {
     ) {
         this.onWhileList = true;
         this.userService = new UserService();
-        this.whileList   = ['/user', '/logs', '/mail'];
+        this.whileList   = ['/user', '/logs', '/mail', '/share'];
     }
 
     async canActivate(

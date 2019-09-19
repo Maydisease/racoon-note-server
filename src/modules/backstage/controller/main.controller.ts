@@ -2,7 +2,6 @@ import {Controller, Get, Inject, UseGuards} from '@nestjs/common';
 import {TestGuard}                          from '../test.guard';
 
 @Controller('api/admin')
-@UseGuards(TestGuard)
 export class MainController {
 
     constructor(@Inject('MainService') public mainService) {
@@ -10,6 +9,6 @@ export class MainController {
 
     @Get()
     async getHello() {
-        return this.mainService.getListData();
+        return {hello: 'hello'}
     }
 }
