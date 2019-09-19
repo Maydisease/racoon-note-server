@@ -48,11 +48,12 @@ console.log({
         DB_PORT    : process.env.DB_PORT,
         DB_DATABASE: process.env.DB_DATABASE,
         DB_USERNAME: process.env.DB_USERNAME,
-        DB_PASSWORD: process.env.DB_PASSWORD,
+        DB_PASSWORD: process.env.DB_PASSWORD
     },
     APP : {
-        APP_RUN_HOST: process.env.APP_RUN_HOST,
-        APP_RUN_PORT: process.env.APP_RUN_PORT,
+        APP_RUN_HOST  : process.env.APP_RUN_HOST,
+        APP_RUN_PORT  : process.env.APP_RUN_PORT,
+        APP_RUN_DOMAIN: process.env.APP_RUN_DOMAIN
     }
 });
 
@@ -81,7 +82,9 @@ export default {
         DB_PASSWORD: process.env.DB_PASSWORD,
     },
     APP : {
-        APP_RUN_HOST: process.env.APP_RUN_HOST,
-        APP_RUN_PORT: process.env.APP_RUN_PORT,
+        APP_RUN_HOST  : process.env.APP_RUN_HOST,
+        APP_RUN_PORT  : process.env.APP_RUN_PORT,
+        APP_RUN_DOMAIN: process.env.APP_RUN_DOMAIN
+
     }
 }
