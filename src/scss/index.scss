@@ -105,6 +105,7 @@ html {
         max-width: 800px;
         width: 800px;
         padding: 50px;
+        overflow: hidden;
         box-sizing: border-box;
         background: $wrapBackgroundColor;
         box-shadow: $wrapBoxShadow;
@@ -126,7 +127,7 @@ html {
             margin-bottom: 60px;
             color: $describeFontColor;
             text-align: center;
-            padding-top: 10px;
+            padding-top: 15px;
             font-size: 14px;
         }
         
@@ -179,6 +180,74 @@ html {
                 padding-bottom: 20px;
             }
             
+            p > code {
+                padding-left: 3px;
+                padding-right: 3px;
+                color: #905;
+                background: #f5f2f0;
+                
+                &:before {
+                    margin-right: 3px;
+                    color: #CCC;
+                    content: '{';
+                }
+                
+                &:after {
+                    margin-left: 3px;
+                    color: #CCC;
+                    content: '}';
+                }
+            }
+            
+            ul {
+                li {
+                    padding-left: 20px;
+                    position: relative;
+                    list-style: none;
+                    box-sizing: border-box;
+                    font-weight: bold;
+                    font-size: 14px;
+                    
+                    &:before {
+                        content: '';
+                        width: 5px;
+                        height: 5px;
+                        border-radius: 50%;
+                        position: absolute;
+                        left: 1px;
+                        top: 7px;
+                        background: RGBA(74, 168, 251, 1);
+                    }
+                }
+            }
+            
+            p + blockquote,
+            ul + blockquote {
+                margin-top: 0;
+            }
+            
+            blockquote {
+                padding-left: 20px;
+                margin-bottom: 20px;
+                margin-top: 20px;
+                position: relative;
+                list-style: none;
+                
+                &:before {
+                    content: '';
+                    width: 5px;
+                    height: 100%;
+                    position: absolute;
+                    left: 2px;
+                    top: 0;
+                    background: RGBA(74, 168, 251, 1);
+                }
+                
+                p {
+                    padding-bottom: 0;
+                }
+            }
+            
             pre {
                 width: 100%;
                 padding: 15px 20px;
@@ -195,6 +264,7 @@ html {
             table {
                 max-width: 100%;
                 font-size: 14px;
+                margin-bottom: 20px;
                 border-width: 1px;
                 border-color: $borderColor;
                 border-collapse: collapse;

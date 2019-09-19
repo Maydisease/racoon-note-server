@@ -22,6 +22,9 @@ async function bootstrap() {
     app.setBaseViewsDir(join(CONFIG.PATH.PROJECT_SRC, 'views'));
     app.setViewEngine('hbs');
 
+    console.log(CONFIG.PATH.PROJECT_SRC);
+    console.log(CONFIG.PATH.STATICS);
+
     app.use(
         sassMiddleware({
             src        : join(CONFIG.PATH.PROJECT_SRC, 'scss'),
