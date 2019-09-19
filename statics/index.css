@@ -119,6 +119,10 @@ html {
 	font-size: 14px
 }
 
+.container .wrap .content {
+	width: 100%;
+}
+
 .container .wrap .content h1, .container .wrap .content h2, .container .wrap .content h3, .container .wrap .content h4, .container .wrap .content h5, .container .wrap .content h6 {
 	width: 100%;
 	padding: 10px 0;
