@@ -154,14 +154,16 @@
         getSecretArticleData(shareCodeCookie);
     }
 
-    secretInputElement.onkeyup = function (e) {
-        clearInterval(timer);
-        timer = setTimeout(() => {
-            if (e.target.value.length === 6) {
-                getSecretArticleData(e.target.value);
-            }
-        }, 200);
-    };
+    if (secretInputElement) {
+        secretInputElement.onkeyup = function (e) {
+            clearInterval(timer);
+            timer = setTimeout(() => {
+                if (e.target.value.length === 6) {
+                    getSecretArticleData(e.target.value);
+                }
+            }, 200);
+        };
+    }
 
 </script>
 </body>
