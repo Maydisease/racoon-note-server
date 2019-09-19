@@ -59,7 +59,7 @@ export class ShareController {
 
         console.log(551, codeObj.id, codeObj.uid, params.share_code);
 
-        const serverBaseAddress = `http://${Conf.APP.APP_RUN_HOST}:${Conf.APP.APP_RUN_PORT}`;
+        const serverBaseAddress = `http://${Conf.APP.APP_RUN_DOMAIN}`;
         const response: any     = await this.shareService.getSecretArticleData(codeObj.id, codeObj.uid, params.share_code);
 
         if (response && response.id) {
@@ -113,7 +113,7 @@ export class ShareController {
             // return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
-        const serverBaseAddress = `http://${Conf.APP.APP_RUN_HOST}:${Conf.APP.APP_RUN_PORT}`;
+        const serverBaseAddress = `http://${Conf.APP.APP_RUN_DOMAIN}`;
         const response: any     = await this.shareService.getArticleData(codeObj.id, codeObj.uid);
 
         const CONF = {
