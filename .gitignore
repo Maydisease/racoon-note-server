@@ -7,4 +7,3 @@ logs
 attached_files
 package-lock.json
 yarn-error.log
-*.css
