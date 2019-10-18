@@ -15,23 +15,18 @@ async function bootstrap() {
     app.useStaticAssets(CONFIG.PATH.ATTACHED_FILES, {
         prefix: '/attached_files/',
     });
-    app.useStaticAssets(CONFIG.PATH.STATICS, {
-        prefix: '/statics/',
-    });
 
     app.setBaseViewsDir(join(CONFIG.PATH.PROJECT_SRC, 'views'));
     app.setViewEngine('hbs');
-
-    console.log(CONFIG.PATH.PROJECT_SRC);
-    console.log(CONFIG.PATH.STATICS);
 
     app.use(
         sassMiddleware({
             src        : join(CONFIG.PATH.PROJECT_SRC, 'scss'),
             dest       : CONFIG.PATH.STATICS,
             debug      : true,
+            response   : true,
             outputStyle: 'compressed',
-            prefix     : '/statics'
+            prefix     : '/statics/'
         }),
     );
 

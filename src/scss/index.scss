@@ -1,7 +1,7 @@
 $windowBackgroundColor: RGBA(247, 247, 247, 1);
 $wrapBackgroundColor: #FFFFFF;
 $wrapBoxShadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-$defaultFontColor: #666666;
+$defaultFontColor: #555;
 $titleFontColor: #000000;
 $stressFontColor: #000000;
 $borderColor: #CCCCCC;
@@ -99,11 +99,11 @@ html {
     }
     
     .wrap {
-        min-height: 900px;
+        min-height: 1000px;
         margin: 0 auto;
-        min-width: 800px;
-        max-width: 800px;
-        width: 800px;
+        min-width: 900px;
+        max-width: 900px;
+        width: 900px;
         padding: 50px;
         overflow: hidden;
         box-sizing: border-box;
@@ -160,6 +160,13 @@ html {
             
             h1 {
                 font-size: 24px;
+            }
+            
+            hr {
+                background: none;
+                border: none;
+                margin-bottom: 20px;
+                border-bottom: 1px dashed RGBA(0, 0, 0, .2);
             }
             
             p {

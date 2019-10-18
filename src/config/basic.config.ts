@@ -10,17 +10,17 @@ let staticsPath: string;
 switch (process.env.APP_ENV) {
     case 'development':
         projectSrcPath    = path.join(__dirname, '../');
-        staticsPath       = path.join(__dirname, '../../statics');
+        staticsPath       = path.join(__dirname, '../../statics/');
         privateKeyPath    = path.join(__dirname, '../../keys/note_key');
         publicKeyPath     = path.join(__dirname, '../../keys/note_key.pub');
-        attachedFilesPath = path.join(__dirname, '../../attached_files');
+        attachedFilesPath = path.join(__dirname, '../../attached_files/');
         break;
     case 'production':
         projectSrcPath    = path.join(__dirname, '../../../src/');
-        staticsPath       = path.join(__dirname, '../../../statics');
+        staticsPath       = path.join(__dirname, '../../../statics/');
         privateKeyPath    = path.join(__dirname, '../../../keys/note_key');
         publicKeyPath     = path.join(__dirname, '../../../keys/note_key.pub');
-        attachedFilesPath = path.join(__dirname, '../../../attached_files');
+        attachedFilesPath = path.join(__dirname, '../../../attached_files/');
         break;
 }
 
