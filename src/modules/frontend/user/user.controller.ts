@@ -103,12 +103,18 @@ export class UserController {
             return this.echoService.fail(1016, this.errorService.error.E1016);
         }
 
-        params.password = this.toolsService.getMD5(params.password);
-        params.userId   = this.userService.buildUserId(params.username, timestamp);
-        const response  = await this.userService.addUserData(params);
+        params.password    = this.toolsService.getMD5(params.password);
+        params.userId      = this.userService.buildUserId(params.username, timestamp);
+        const response     = await this.userService.addUserData(params);
 
         // 写入数据失败
         if (!(response && response.raw.insertId > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        const initResponse = await this.userService.userInit(params.userId, params.inputTime);
+
+        if (!(initResponse && initResponse.raw.insertId > 0)) {
             return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 

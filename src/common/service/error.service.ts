@@ -25,7 +25,11 @@ enum EMessage {
     'E1021' = 'The verification code does not match the account number.',
     'E1022' = 'Verification code failed to be sent, please resend',
     'E1023' = 'Icon does not exist',
-    'E1024' = 'Incorrect sharing code'
+    'E1024' = 'Incorrect sharing code',
+    'E1025' = 'Currently this category is super category and cannot be renamed.',
+    'E1026' = 'Currently this category is super category and cannot be deleted.',
+    'E1027' = 'Currently this category is super category and cannot be created son category.',
+    'E1028' = 'This user\'s super tmp category does not exist.',
 }
 
 // return this.echoService.fail(0 9001, "Data read failed");

@@ -160,7 +160,7 @@ export class ArticleModel {
                    .execute();
     }
 
-    public updateArticleShareCode(id: number, params: any){
+    public updateArticleShareCode(id: number, params: any) {
         const setBody: any = {
             share_code: params.share_code,
             updateTime: params.updateTime
@@ -227,5 +227,67 @@ export class ArticleModel {
         order[type] = 'DESC';
 
         return this.connection.getRepository(this.tableNoteArticle).find({where, order});
+    }
+
+    public getTrashArticleData(uid: string, disable: number) {
+        console.log(uid, disable);
+        return this.connection.getRepository(this.tableNoteArticle)
+                   .find(
+                       {
+                           select: ['id', 'title'],
+                           where : [{uid, disable}],
+                           order : {
+                               id: "DESC"
+                           }
+                       }
+                   );
+    }
+
+    public getTrashArticleDetail(id: number, uid: string) {
+        return this.connection.getRepository(this.tableNoteArticle)
+                   .findOne(
+                       {
+                           select: ['id', 'title', 'description', 'updateTime', 'cid'],
+                           where : [{uid, id}],
+                           order : {
+                               id: "DESC"
+                           }
+                       }
+                   );
+    }
+
+    public removeTrashArticle(id: number, uid: string) {
+        return this.connection.createQueryBuilder()
+                   .delete()
+                   .from(this.tableNoteArticle)
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
+                   .execute();
+    }
+
+    public getTmpCategoryId(uid: string) {
+        return this.connection.getRepository(this.tableNoteCategory)
+                   .findOne(
+                       {
+                           select: ['id'],
+                           where : [{uid, is_super: 1, fn_code: 'tmp'}]
+                       }
+                   );
+    }
+
+    public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
+        const setBody: any = {
+            cid: cid,
+            updateTime: updateTime,
+            disable: 0
+        };
+
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableNoteArticle)
+                   .set(setBody)
+                   .where('id = :id', {id})
+                   .andWhere('uid = :uid', {uid})
+                   .execute();
     }
 }

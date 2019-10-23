@@ -16,8 +16,12 @@ export class CategoryModel {
     getCategoryData(uid): Promise<object> {
         return this.connection.getRepository(this.tableNoteCategory).find(
             {
-                select: ['id', 'name', 'parent', 'iconText'],
+                select: ['id', 'name', 'parent', 'iconText', 'is_super'],
                 where : [{uid}],
+                order : {
+                    is_super : "DESC",
+                    inputTime: "ASC"
+                }
             },
         );
     }
@@ -69,6 +73,16 @@ export class CategoryModel {
                    .where('binary name = :name', {name})
                    .andWhere('uid = :uid', {uid})
                    .andWhere('parent = :parent', {parent})
+                   .printSql()
+                   .getCount();
+    }
+
+    verifyCategoryIsSuper(id: number) {
+        return this.connection
+                   .getRepository(this.tableNoteCategory)
+                   .createQueryBuilder()
+                   .where('id = :id', {id})
+                   .andWhere('is_super = :is_super', {is_super: 1})
                    .printSql()
                    .getCount();
     }

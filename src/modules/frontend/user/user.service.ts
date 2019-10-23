@@ -3,6 +3,19 @@ import {UserModel}                 from './user.model';
 import {Connection, getConnection} from 'typeorm';
 import * as crypto                 from 'crypto';
 
+interface CategoryBody {
+    name: string;
+    uid: string;
+    parent: number;
+    count: number;
+    iconText: string;
+    iconColor: string;
+    updateTime: number;
+    inputTime: number;
+    fn_code: string;
+    is_super: number;
+}
+
 @Injectable()
 export class UserService {
 
@@ -53,5 +66,23 @@ export class UserService {
     // 更新用户密码
     public async updateUserPassword(username: string, password: string, updateTime: number) {
         return await new UserModel(this.connection).updateUserPassword(username, password, updateTime);
+    }
+
+    public async userInit(uid: string, inputTime: number) {
+
+        const categoryParams: CategoryBody = {
+            name      : 'tmp',
+            uid       : uid,
+            count     : 0,
+            parent    : 0,
+            iconText  : 'poetry',
+            iconColor : 'default',
+            inputTime : inputTime,
+            updateTime: inputTime,
+            fn_code   : 'tmp',
+            is_super  : 1
+        };
+
+        return await new UserModel(this.connection).userInit(categoryParams);
     }
 }

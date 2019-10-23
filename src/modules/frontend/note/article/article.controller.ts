@@ -1,7 +1,7 @@
 import * as MarkdownIt                           from 'markdown-it';
 import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 import {ArticleService}                          from './article.service';
-import conf                                      from '../../../../config';
+import * as moment                               from 'moment';
 import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
@@ -28,6 +28,11 @@ const markdownItMermaid = require('markdown-it-mermaid').default;
 const markdownItImsize  = require('markdown-it-imsize');
 
 declare var Prism: any;
+
+interface RemoveTrashArticle {
+    id: number;
+    uid: string;
+}
 
 interface AddArticleDataBody {
     title: string;
@@ -81,6 +86,16 @@ interface GetArticleData {
     uid: string;
 }
 
+interface GetTrashArticleData {
+    disable: number;
+    uid: string;
+}
+
+interface GetTrashArticleDetail {
+    id: number;
+    uid: string;
+}
+
 interface SetArticleDisableStateBody {
     id: number;
     uid?: string;
@@ -93,6 +108,12 @@ interface SetArticleLockStateBody {
     uid?: string;
     lock: number;
     password?: string;
+    updateTime?: number;
+}
+
+interface ResetTrashArticleToTmpCategory {
+    id: number;
+    uid: string;
     updateTime?: number;
 }
 
@@ -413,6 +434,114 @@ export class ArticleController {
         });
 
         return this.echoService.success(searchData);
+
+    }
+
+    @Post('getTrashArticleData')
+    async getTrashArticleData(@Body() body: GetTrashArticleData, @Request() req): Promise<object> {
+        const params: GetTrashArticleData = this.toolsService.filterInvalidParams({
+            disable: 1,
+            uid    : String(req.userInfo.userId),
+        });
+
+        const response: any = await this.articleService.getTrashArticleData(params.uid, params.disable);
+
+        if (!response) {
+            return this.echoService.fail(9001);
+        }
+
+        return this.echoService.success(response);
+
+    }
+
+    @Post('getTrashArticleDetail')
+    async getTrashArticleDetail(@Body() body: GetTrashArticleDetail, @Request() req): Promise<object> {
+        const params: GetTrashArticleDetail = this.toolsService.filterInvalidParams({
+            id : Number(body.id),
+            uid: String(req.userInfo.userId),
+        });
+
+        const sourceData = await Promise.all([
+            this.articleService.getCategoryData(params.uid),
+            this.articleService.getTrashArticleDetail(params.id, params.uid),
+        ]);
+
+        const categoryData       = sourceData[0];
+        const trashArticleDetail = sourceData[1];
+
+        if (!trashArticleDetail || !categoryData) {
+            return this.echoService.fail(9001);
+        }
+
+        const getCrumbs = (cid: number) => {
+            const crumbs   = [];
+            const findLoop = (cid1: number) => {
+                categoryData.filter((item: any) => {
+                    if (item.id === cid1) {
+                        crumbs.unshift(item.name);
+                        findLoop(item.parent);
+                    }
+                });
+            };
+            findLoop(cid);
+            return crumbs;
+        };
+
+        (trashArticleDetail as any).crumbs = getCrumbs((trashArticleDetail as any).cid);
+        (trashArticleDetail as any).date   = moment(new Date(Number((trashArticleDetail as any).updateTime))).format("LLL");
+
+
+        return this.echoService.success(trashArticleDetail);
+
+    }
+
+    @Post('removeTrashArticle')
+    async removeTrashArticle(@Body() body: RemoveTrashArticle, @Request() req): Promise<object> {
+        const params: RemoveTrashArticle = this.toolsService.filterInvalidParams({
+            id : Number(body.id),
+            uid: String(req.userInfo.userId),
+        });
+
+        // 判断当前id是否是有效的文章
+        if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
+            return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        const response: any = await this.articleService.removeTrashArticle(params.id, params.uid);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.affectedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        return this.echoService.success(response);
+
+    }
+
+    @Post('resetTrashArticleToTmpCategory')
+    async resetTrashArticleToTmpCategory(@Body() body: ResetTrashArticleToTmpCategory, @Request() req): Promise<object> {
+        const timestamp                              = new Date().getTime();
+        const params: ResetTrashArticleToTmpCategory = this.toolsService.filterInvalidParams({
+            id        : Number(body.id),
+            uid       : String(req.userInfo.userId),
+            updateTime: timestamp
+        });
+
+        const getTmpCategoryIdResponse: any = await this.articleService.getTmpCategoryId(params.uid);
+
+        // 判断该用户是否有创建超级分类tmp
+        if (!getTmpCategoryIdResponse.id) {
+            return this.echoService.fail(1028, this.errorService.error.E1028);
+        }
+
+        const response: any = await this.articleService.resetTrashArticleToTmpCategory(params.id, params.uid, getTmpCategoryIdResponse.id, params.updateTime);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.changedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        return this.echoService.success(response);
 
     }
 

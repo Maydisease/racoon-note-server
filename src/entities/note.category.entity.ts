@@ -8,6 +8,9 @@ export class _NoteCategory {
     @Column('varchar')
     name: string;
 
+    @Column({type: 'varchar', length: 30, default: ''})
+    fn_code: string;
+
     @Column({type: 'varchar', length: 13})
     uid: string;
 
@@ -22,6 +25,9 @@ export class _NoteCategory {
 
     @Column({type: 'varchar', precision: 13})
     iconColor: string;
+
+    @Column({type: 'int', default: 0})
+    is_super: number;
 
     @Column({type: 'bigint', precision: 13})
     updateTime: number;

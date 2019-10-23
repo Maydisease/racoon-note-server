@@ -1,12 +1,15 @@
-import {_User}      from '../../../entities/user.entity';
-import {Connection} from 'typeorm';
+import {_User}         from '../../../entities/user.entity';
+import {_NoteCategory} from '../../../entities/note.category.entity';
+import {Connection}    from 'typeorm';
 
 export class UserModel {
 
     public tableUser;
+    public tableNoteCategory;
 
     constructor(private readonly connection: Connection) {
-        this.tableUser = _User;
+        this.tableUser         = _User;
+        this.tableNoteCategory = _NoteCategory;
     }
 
     getUserData() {
@@ -78,5 +81,17 @@ export class UserModel {
                    .set(setBody)
                    .where('username = :username', {username})
                    .execute();
+    }
+
+    userInit(categoryParams) {
+        if (categoryParams.uid) {
+            return this.connection
+                       .createQueryBuilder()
+                       .insert()
+                       .into(this.tableNoteCategory)
+                       .values([categoryParams])
+                       .printSql()
+                       .execute();
+        }
     }
 }

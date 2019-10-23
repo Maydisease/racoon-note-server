@@ -5,6 +5,7 @@ interface AddCategoryDataBody {
     uid: string;
     parent: number;
     count: number;
+    fn_code: string;
     iconText: string;
     iconColor: string;
     updateTime: number;
@@ -73,6 +74,7 @@ export class CategoryController {
             count     : 0,
             iconText  : 'folder',
             iconColor : 'default',
+            fn_code   : '',
             updateTime: timestamp,
             inputTime : timestamp,
         });
@@ -90,6 +92,11 @@ export class CategoryController {
         // 当前分类已存在
         if (await this.categoryService.verifyCategoryExist(params.name, params.uid, params.parent)) {
             return this.echoService.fail(1010, this.errorService.error.E1010);
+        }
+
+        // 当前是超级分类
+        if (await this.categoryService.verifyCategoryIsSuper(params.parent)) {
+            return this.echoService.fail(1027, this.errorService.error.E1027);
         }
 
         // 写入数据
@@ -130,6 +137,11 @@ export class CategoryController {
         // 当前分类不存在
         if (!await this.categoryService.verifyCategoryIdExist(params.id)) {
             return this.echoService.fail(1011, this.errorService.error.E1011);
+        }
+
+        // 当前是超级分类
+        if (await this.categoryService.verifyCategoryIsSuper(params.id)) {
+            return this.echoService.fail(1025, this.errorService.error.E1025);
         }
 
         const response = await this.categoryService.renameCategory(params.id, params.name, params.updateTime, params.uid);
@@ -196,6 +208,11 @@ export class CategoryController {
         // 当前分类存在文章，不允许删除
         if (await this.categoryService.verifyExistArticle(params.id)) {
             return this.echoService.fail(1014, this.errorService.error.E1014);
+        }
+
+        // 当前是超级分类，不允许删除
+        if (await this.categoryService.verifyCategoryIsSuper(params.id)) {
+            return this.echoService.fail(1026, this.errorService.error.E1026);
         }
 
         let response;

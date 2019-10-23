@@ -62,4 +62,24 @@ export class ArticleService {
     public getSearchData(uid: string, keys: string, type: string, disable: number, lock: number) {
         return new ArticleModel(this.connection).getSearchData(uid, keys, type, disable, lock);
     }
+
+    public getTrashArticleData(uid: string, disable: number): Promise<object> {
+        return new ArticleModel(this.connection).getTrashArticleData(uid, disable);
+    }
+
+    public getTrashArticleDetail(id: number, uid: string) {
+        return new ArticleModel(this.connection).getTrashArticleDetail(id, uid);
+    }
+
+    public removeTrashArticle(id: number, uid: string) {
+        return new ArticleModel(this.connection).removeTrashArticle(id, uid);
+    }
+
+    public getTmpCategoryId(uid: string) {
+        return new ArticleModel(this.connection).getTmpCategoryId(uid);
+    }
+
+    public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
+        return new ArticleModel(this.connection).resetTrashArticleToTmpCategory(id, uid, cid, updateTime);
+    }
 }

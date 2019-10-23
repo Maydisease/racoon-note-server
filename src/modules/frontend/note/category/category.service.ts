@@ -29,6 +29,10 @@ export class CategoryService {
         return await new CategoryModel(this.connection).verifyCategoryExist(name, uid, parent) >= 1;
     }
 
+    public async verifyCategoryIsSuper(id: number): Promise<boolean>{
+        return await new CategoryModel(this.connection).verifyCategoryIsSuper(id) >=1;
+    }
+
     public addCategoryData(params: object): Promise<object> {
         return new CategoryModel(this.connection).addCategoryData(params);
     }
