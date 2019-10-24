@@ -237,7 +237,7 @@ export class ArticleModel {
                            select: ['id', 'title'],
                            where : [{uid, disable}],
                            order : {
-                               id: "DESC"
+                               updateTime: "DESC"
                            }
                        }
                    );
@@ -277,9 +277,9 @@ export class ArticleModel {
 
     public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
         const setBody: any = {
-            cid: cid,
+            cid       : cid,
             updateTime: updateTime,
-            disable: 0
+            disable   : 0
         };
 
         return this.connection
