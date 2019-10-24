@@ -117,6 +117,14 @@ interface ResetTrashArticleToTmpCategory {
     updateTime?: number;
 }
 
+interface ResetTrashArticleBody {
+    id: number;
+    disable: number;
+    cid?: number;
+    uid?: string;
+    updateTime?: number;
+}
+
 @Controller('note')
 export class ArticleController {
 
@@ -256,7 +264,7 @@ export class ArticleController {
 
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
-            return this.echoService.fail(1003, this.errorService.error.E1003);
+            return this.echoService.fail(1002, this.errorService.error.E1002);
         }
 
         const response: any = await this.articleService.updateArticleShareCode(params.id, params);
@@ -285,7 +293,7 @@ export class ArticleController {
 
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
-            return this.echoService.fail(1003, this.errorService.error.E1003);
+            return this.echoService.fail(1002, this.errorService.error.E1002);
         }
 
         const response: any = await this.articleService.updateArticleShareConf(params.id, params);
@@ -316,7 +324,7 @@ export class ArticleController {
 
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
-            return this.echoService.fail(1003, this.errorService.error.E1003);
+            return this.echoService.fail(1002, this.errorService.error.E1002);
         }
 
         if (params.html_content) {
@@ -504,7 +512,7 @@ export class ArticleController {
 
         // 判断当前id是否是有效的文章
         if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
-            return this.echoService.fail(1003, this.errorService.error.E1003);
+            return this.echoService.fail(1002, this.errorService.error.E1002);
         }
 
         const response: any = await this.articleService.removeTrashArticle(params.id, params.uid);
@@ -535,6 +543,33 @@ export class ArticleController {
         }
 
         const response: any = await this.articleService.resetTrashArticleToTmpCategory(params.id, params.uid, getTmpCategoryIdResponse.id, params.updateTime);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.changedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        return this.echoService.success(response);
+
+    }
+
+    @Post('resetTrashArticle')
+    async resetTrashArticle(@Body() body: ResetTrashArticleBody, @Request() req): Promise<object> {
+        const timestamp                     = new Date().getTime();
+        const params: ResetTrashArticleBody = this.toolsService.filterInvalidParams({
+            id        : Number(body.id),
+            disable   : 0,
+            cid       : Number(body.cid),
+            uid       : String(req.userInfo.userId),
+            updateTime: timestamp,
+        });
+
+        // 判断当前需要恢复的文章的分类是否存在
+        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid)) {
+            return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        const response: any = await this.articleService.setArticleDisableState(params.id, params.uid, params.disable, params.updateTime);
 
         // 判断数据是否正常插入到了article表
         if (!(response && response.raw.changedRows > 0)) {
