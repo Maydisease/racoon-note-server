@@ -1,9 +1,9 @@
 .idea
 .DS_Store
 node_modules
-build
-dist
-logs
+./build
+./dist
+./logs
 attached_files
 package-lock.json
 yarn-error.log

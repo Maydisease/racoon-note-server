@@ -49,7 +49,7 @@ export class UserService {
     }
 
     // 验证库中是否存在该用户
-    public async verifyUserValidity(username: string, password: string): Promise<object> {
+    public async verifyUserIdentity(username: string, password: string): Promise<object> {
         return await new UserModel(this.connection).verifyUserIdentity(username, password);
     }
 
