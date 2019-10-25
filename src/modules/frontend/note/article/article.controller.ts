@@ -207,6 +207,7 @@ export class ArticleController {
         return this.echoService.success(response);
     }
 
+    // 添加文章数据
     @Post('addArticleData')
     async addArticleData(@Body() body: AddArticleDataBody, @Request() req): Promise<object> {
         // 格式化数据
@@ -251,6 +252,7 @@ export class ArticleController {
 
     }
 
+    // 更新文章分享上的随机ShareCode
     @Post('updateArticleShareCode')
     async updateArticleShareCode(@Body() body: UpdateArticleShareCodeBody, @Request() req): Promise<object> {
         const timestamp                          = new Date().getTime();
@@ -280,6 +282,7 @@ export class ArticleController {
 
     }
 
+    // 更新文章分享面板配置参数
     @Post('updateArticleShareConf')
     async updateArticleShareConf(@Body() body: UpdateArticleShareConfBody, @Request() req): Promise<object> {
         const timestamp                          = new Date().getTime();
@@ -309,6 +312,7 @@ export class ArticleController {
 
     }
 
+    // 更新文章数据
     @Post('updateArticleData')
     async updateArticleData(@Body() body: UpdateArticleDataBody, @Request() req): Promise<object> {
 
@@ -342,6 +346,7 @@ export class ArticleController {
 
     }
 
+    // 设置文章禁用状态(垃圾箱)
     @Post('setArticleDisableState')
     async setArticleDisableState(@Body() body: SetArticleDisableStateBody, @Request() req): Promise<object> {
         const timestamp                          = new Date().getTime();
@@ -363,6 +368,7 @@ export class ArticleController {
 
     }
 
+    // 设置文章锁定状态(分享)
     @Post('setArticleLockState')
     async setArticleLockState(@Body() body: SetArticleLockStateBody, @Request() req) {
         const timestamp                       = new Date().getTime();
@@ -390,6 +396,7 @@ export class ArticleController {
 
     }
 
+    // 搜索文章
     @Post('search')
     async search(@Body() body: any, @Request() req) {
         const params: any = this.toolsService.filterInvalidParams({
@@ -445,6 +452,7 @@ export class ArticleController {
 
     }
 
+    // 获取垃圾箱中的数据列表
     @Post('getTrashArticleData')
     async getTrashArticleData(@Body() body: GetTrashArticleData, @Request() req): Promise<object> {
         const params: GetTrashArticleData = this.toolsService.filterInvalidParams({
@@ -462,6 +470,7 @@ export class ArticleController {
 
     }
 
+    // 获取垃圾箱中选中文章的详情参数
     @Post('getTrashArticleDetail')
     async getTrashArticleDetail(@Body() body: GetTrashArticleDetail, @Request() req): Promise<object> {
         const params: GetTrashArticleDetail = this.toolsService.filterInvalidParams({
@@ -503,6 +512,7 @@ export class ArticleController {
 
     }
 
+    // 彻底删除垃圾箱中的文章
     @Post('removeTrashArticle')
     async removeTrashArticle(@Body() body: RemoveTrashArticle, @Request() req): Promise<object> {
         const params: RemoveTrashArticle = this.toolsService.filterInvalidParams({
@@ -526,6 +536,7 @@ export class ArticleController {
 
     }
 
+    // 恢复垃圾箱中找不到分类的文章到tmp分类下
     @Post('resetTrashArticleToTmpCategory')
     async resetTrashArticleToTmpCategory(@Body() body: ResetTrashArticleToTmpCategory, @Request() req): Promise<object> {
         const timestamp                              = new Date().getTime();
@@ -553,6 +564,8 @@ export class ArticleController {
 
     }
 
+
+    // 恢复垃圾箱中的文章
     @Post('resetTrashArticle')
     async resetTrashArticle(@Body() body: ResetTrashArticleBody, @Request() req): Promise<object> {
         const timestamp                     = new Date().getTime();

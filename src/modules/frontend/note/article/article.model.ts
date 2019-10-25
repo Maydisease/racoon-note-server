@@ -137,6 +137,7 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 更新文章分享面板上的参数
     public updateArticleShareConf(id: number, params: any) {
 
         const setBody: any = {
@@ -160,6 +161,7 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 跟新文章分享面板上的ShareCode
     public updateArticleShareCode(id: number, params: any) {
         const setBody: any = {
             share_code: params.share_code,
@@ -174,7 +176,7 @@ export class ArticleModel {
                    .execute();
     }
 
-
+    // 设置文章的禁用状态
     public setArticleDisableState(id: number, uid: string, disable: number, updateTime: number) {
         const setBody: any = {
             disable,
@@ -190,6 +192,7 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 设置文章的锁定状态(分享)
     public setArticleLockState(id: number, uid: string, lock: number, updateTime: number) {
         const setBody: any = {
             lock,
@@ -205,6 +208,7 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 获取文章分类信息
     public getCategoryData(uid: string) {
         return this.connection.getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
@@ -213,6 +217,7 @@ export class ArticleModel {
                    .getMany();
     }
 
+    // 获取搜索数据
     public getSearchData(uid, keys, type, disable, lock) {
 
         const where = {
@@ -229,6 +234,7 @@ export class ArticleModel {
         return this.connection.getRepository(this.tableNoteArticle).find({where, order});
     }
 
+    // 获取垃圾箱的文章列表
     public getTrashArticleData(uid: string, disable: number) {
         console.log(uid, disable);
         return this.connection.getRepository(this.tableNoteArticle)
@@ -243,6 +249,7 @@ export class ArticleModel {
                    );
     }
 
+    // 获取垃圾箱的文章详情
     public getTrashArticleDetail(id: number, uid: string) {
         return this.connection.getRepository(this.tableNoteArticle)
                    .findOne(
@@ -256,6 +263,7 @@ export class ArticleModel {
                    );
     }
 
+    // 彻底粉碎指定文章
     public removeTrashArticle(id: number, uid: string) {
         return this.connection.createQueryBuilder()
                    .delete()
@@ -265,6 +273,7 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 获取tmp分类的分类id
     public getTmpCategoryId(uid: string) {
         return this.connection.getRepository(this.tableNoteCategory)
                    .findOne(
@@ -275,6 +284,7 @@ export class ArticleModel {
                    );
     }
 
+    // 重置垃圾箱中找不到分类的文章到tmp分类下
     public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
         const setBody: any = {
             cid       : cid,

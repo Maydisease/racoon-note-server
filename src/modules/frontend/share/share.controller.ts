@@ -21,6 +21,7 @@ export class ShareController {
 
     }
 
+    // 获取分享数据内容
     @Post('getShareArticleData')
     async getShareArticleData(@Body() body, @Request() req): Promise<object> {
         const params = this.toolsService.filterInvalidParams({

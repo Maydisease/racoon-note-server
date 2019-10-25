@@ -36,7 +36,8 @@ export class UserModel {
                    .execute();
     }
 
-    verifyUserValidity(username: string, password: string): Promise<object> {
+    // 验证用户密码是否匹配
+    verifyUserIdentity(username: string, password: string): Promise<object> {
         return this.connection.getRepository(this.tableUser).find(
             {
                 select: ['userId', 'username', 'options', 'inputTime', 'updateTime'],

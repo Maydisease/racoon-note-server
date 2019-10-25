@@ -1,17 +1,19 @@
-import {Body, Controller, Headers, Inject, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Headers, Inject, Get, Query, Param, UseGuards, UsePipes} from '@nestjs/common';
+import {ValidationPipe}                                                            from "./validation.pipe";
+
 
 @Controller('logs')
 export class LogsController {
 
-    constructor(
-        @Inject('echoService') public echoService,
-    ) {
+    constructor() {
     }
 
     // 获取分类数据
-    @Post('echo')
-    async echoLogs(@Body() body) {
-        return this.echoService.success();
+    @UsePipes(new ValidationPipe())
+    @Get('echo')
+    async echoLogs(@Query() query) {
+        console.log('进来了...');
+        return {}
     }
 
 }

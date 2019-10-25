@@ -21,6 +21,8 @@ export class UserLoginOAuthGuard implements CanActivate {
         context: ExecutionContext,
     ): Promise<boolean> {
 
+        console.log('守卫');
+
         let isLoginState = false;
         const headers    = context.switchToHttp().getRequest().headers;
 

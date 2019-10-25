@@ -121,6 +121,7 @@ export class UserController {
         return this.echoService.success(response);
     }
 
+    // 注册用户
     @Post('signIn')
     async signIn(@Body() body) {
 
@@ -143,7 +144,7 @@ export class UserController {
         }
 
         params.password = this.toolsService.getMD5(params.password);
-        const response  = await this.userService.verifyUserValidity(params.username, params.password);
+        const response  = await this.userService.verifyUserIdentity(params.username, params.password);
 
         // 用户存在
         if (typeof response === 'object' && response.length > 0) {
@@ -161,6 +162,7 @@ export class UserController {
 
     }
 
+    // 验证用户登陆状态
     @Post('verifySignState')
     public async verifySignState(@Headers() headers): Promise<object> {
 
@@ -194,6 +196,7 @@ export class UserController {
 
     }
 
+    // 更改用户密码
     @Post('changeUserPassword')
     public async verifyForgetPasswordMailCode(@Body() body) {
         const timestamp = new Date().getTime();

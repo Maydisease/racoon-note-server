@@ -77,6 +77,7 @@ export class CategoryModel {
                    .getCount();
     }
 
+    // 验证当前分类是否是超级分类
     verifyCategoryIsSuper(id: number) {
         return this.connection
                    .getRepository(this.tableNoteCategory)
@@ -111,6 +112,7 @@ export class CategoryModel {
                    .execute();
     }
 
+    // 删除指定分类
     removeCategory(id: number, uid: string): Promise<object> {
         return this.connection.createQueryBuilder()
                    .delete()
@@ -120,6 +122,7 @@ export class CategoryModel {
                    .execute();
     }
 
+    // 删除多个分类
     removeMultipleCategory(id: number[], uid: string): Promise<object> {
         return this.connection.createQueryBuilder()
                    .delete()
@@ -129,6 +132,7 @@ export class CategoryModel {
                    .execute();
     }
 
+    // 更新指定分类的icon
     updateCategoryIcon(id: number, uid: string, iconText: string, updateTime: number) {
         const body: any = {iconText, updateTime};
         return this.connection.createQueryBuilder()

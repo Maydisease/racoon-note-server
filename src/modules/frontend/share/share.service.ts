@@ -13,10 +13,12 @@ export class ShareService {
         this.secret     = 'note';
     }
 
+    // 获取文章数据
     public getArticleData(id: number, uid: string): Promise<object> {
         return new ShareModel(this.connection).getArticleData(id, uid);
     }
 
+    // 获取加密的文章数据
     public getSecretArticleData(id: number, uid: string, share_code: string): Promise<object> {
         return new ShareModel(this.connection).getSecretArticleData(id, uid, share_code);
     }

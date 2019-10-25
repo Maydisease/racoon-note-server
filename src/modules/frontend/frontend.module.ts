@@ -8,6 +8,7 @@ import {CategoryService}     from './note/category/category.service';
 import {CategoryController}  from './note/category/category.controller';
 import {ArticleController}   from './note/article/article.controller';
 import {AttachedController}  from './attached/attached.controller';
+import {LogsController}      from './logs/logs.controller';
 import {ShareController}     from './share/share.controller';
 import {ShareService}        from './share/share.service';
 import {ArticleService}      from './note/article/article.service';
@@ -22,7 +23,8 @@ import {ErrorService}        from '../../common/service/error.service';
         CategoryController,
         ArticleController,
         AttachedController,
-        ShareController
+        ShareController,
+        LogsController
     ],
     providers  : [
         {provide: APP_GUARD, useClass: UserLoginOAuthGuard},

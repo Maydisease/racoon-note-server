@@ -65,6 +65,7 @@ export class AttachedController {
         }
     }
 
+    // 获取附件数据
     @Post('getAttachedData')
     async getAttachedData(@Body() body, @Request() req) {
 
@@ -82,6 +83,7 @@ export class AttachedController {
         return this.echoService.success(response);
     }
 
+    // 删除附件
     @Post('removeAttached')
     async removeAttached(@Body() body, @Request() req) {
 
