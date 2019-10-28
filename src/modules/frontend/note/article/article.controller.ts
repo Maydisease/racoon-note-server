@@ -183,8 +183,6 @@ export class ArticleController {
             return this.echoService.fail(9001);
         }
 
-        console.log(params.uid);
-
         if (response.length > 0) {
             response.forEach((item: any, index: number) => {
                 const id           = this.toolsService.aesEncrypt(`${item.id}&${params.uid}`);
@@ -458,6 +456,7 @@ export class ArticleController {
 
     }
 
+    // 快捷搜索 -> 搜索标题
     @Post('getQuickSearchDataList')
     public async getQuickSearchDataList(@Body() body: GetQuickSearchDataList, @Request() req) {
         const params: any = this.toolsService.filterInvalidParams({
@@ -468,7 +467,6 @@ export class ArticleController {
 
         const userCategoryResponse = await this.articleService.getUserCategoryData(params.uid);
 
-        console.log('cid：', params.cid);
         const getAllSonCategoryIds = (cid: number) => {
             const arr      = cid ? [cid] : [];
             const findLoop = ($cid: number) => {

@@ -1,6 +1,6 @@
-import {_NoteArticle}     from '../../../../entities/note.article.entity';
-import {_NoteCategory}    from '../../../../entities/note.category.entity';
-import {_User}            from '../../../../entities/user.entity';
+import {_NoteArticle}         from '../../../../entities/note.article.entity';
+import {_NoteCategory}        from '../../../../entities/note.category.entity';
+import {_User}                from '../../../../entities/user.entity';
 import {Connection, Like, In} from 'typeorm';
 
 interface ArticleUpdateParams {
@@ -236,7 +236,6 @@ export class ArticleModel {
 
     // 获取垃圾箱的文章列表
     public getTrashArticleData(uid: string, disable: number) {
-        console.log(uid, disable);
         return this.connection.getRepository(this.tableNoteArticle)
                    .find(
                        {
@@ -301,10 +300,8 @@ export class ArticleModel {
                    .execute();
     }
 
+    // 快捷搜索 -> 搜索标题
     public getQuickSearchDataList(keys: string, sonCategoryIds: number[]) {
-
-        console.log(501, sonCategoryIds);
-
         return this.connection.getRepository(this.tableNoteArticle).find(
             {
                 select: ['id', 'cid', 'title', 'description', 'lock', 'on_share', 'use_share_code', 'share_code', 'updateTime'],

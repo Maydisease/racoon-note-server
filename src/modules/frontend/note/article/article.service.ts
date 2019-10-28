@@ -101,6 +101,7 @@ export class ArticleService {
         return new ArticleModel(this.connection).resetTrashArticleToTmpCategory(id, uid, cid, updateTime);
     }
 
+    // 快捷搜索 -> 搜索标题
     public getQuickSearchDataList(title: string, sonCategoryIds: number[]) {
         return new ArticleModel(this.connection).getQuickSearchDataList(title, sonCategoryIds);
     }
