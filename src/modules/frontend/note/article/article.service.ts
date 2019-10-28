@@ -67,8 +67,8 @@ export class ArticleService {
     }
 
     // 获取分类数据
-    public getCategoryData(uid: string) {
-        return new ArticleModel(this.connection).getCategoryData(uid);
+    public getUserCategoryData(uid: string) {
+        return new ArticleModel(this.connection).getUserCategoryData(uid);
     }
 
     // 获取搜索数据
@@ -99,5 +99,9 @@ export class ArticleService {
     // 重置垃圾箱中指定文章到它原本的分类下
     public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
         return new ArticleModel(this.connection).resetTrashArticleToTmpCategory(id, uid, cid, updateTime);
+    }
+
+    public getQuickSearchDataList(title: string, sonCategoryIds: number[]) {
+        return new ArticleModel(this.connection).getQuickSearchDataList(title, sonCategoryIds);
     }
 }

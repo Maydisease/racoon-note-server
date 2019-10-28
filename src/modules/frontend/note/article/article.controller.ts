@@ -125,6 +125,12 @@ interface ResetTrashArticleBody {
     updateTime?: number;
 }
 
+interface GetQuickSearchDataList {
+    uid?: string;
+    cid?: number;
+    keys: string;
+}
+
 @Controller('note')
 export class ArticleController {
 
@@ -408,7 +414,7 @@ export class ArticleController {
         });
 
         const sourceData = await Promise.all([
-            this.articleService.getCategoryData(params.uid),
+            this.articleService.getUserCategoryData(params.uid),
             this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable, params.lock),
         ]);
 
@@ -452,6 +458,52 @@ export class ArticleController {
 
     }
 
+    @Post('getQuickSearchDataList')
+    public async getQuickSearchDataList(@Body() body: GetQuickSearchDataList, @Request() req) {
+        const params: any = this.toolsService.filterInvalidParams({
+            keys: String(body.keys),
+            cid : Number(body.cid),
+            uid : String(req.userInfo.userId)
+        });
+
+        const userCategoryResponse = await this.articleService.getUserCategoryData(params.uid);
+
+        console.log('cid：', params.cid);
+        const getAllSonCategoryIds = (cid: number) => {
+            const arr      = cid ? [cid] : [];
+            const findLoop = ($cid: number) => {
+                userCategoryResponse.filter((item: any) => {
+                    console.log(item.id, $cid);
+                    if (item.parent === $cid) {
+                        arr.unshift(item.id);
+                        findLoop(item.id);
+                    }
+                });
+            };
+            findLoop(cid);
+            return arr;
+        };
+
+        let sonCategoryIds = getAllSonCategoryIds(params.cid);
+
+        const response: any = await this.articleService.getQuickSearchDataList(params.keys, sonCategoryIds);
+
+        // 判断数据是否正常取出了
+        if (!response) {
+            return this.echoService.fail(9001);
+        }
+
+        if (response.length > 0) {
+            response.forEach((item: any, index: number) => {
+                const id           = this.toolsService.aesEncrypt(`${item.id}&${params.uid}`);
+                item.share_address = `/share/note?id=${id}`;
+            });
+        }
+
+        return this.echoService.success(response);
+
+    }
+
     // 获取垃圾箱中的数据列表
     @Post('getTrashArticleData')
     async getTrashArticleData(@Body() body: GetTrashArticleData, @Request() req): Promise<object> {
@@ -479,7 +531,7 @@ export class ArticleController {
         });
 
         const sourceData = await Promise.all([
-            this.articleService.getCategoryData(params.uid),
+            this.articleService.getUserCategoryData(params.uid),
             this.articleService.getTrashArticleDetail(params.id, params.uid),
         ]);
 

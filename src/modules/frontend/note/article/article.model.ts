@@ -1,7 +1,7 @@
 import {_NoteArticle}     from '../../../../entities/note.article.entity';
 import {_NoteCategory}    from '../../../../entities/note.category.entity';
 import {_User}            from '../../../../entities/user.entity';
-import {Connection, Like} from 'typeorm';
+import {Connection, Like, In} from 'typeorm';
 
 interface ArticleUpdateParams {
     title?: string;
@@ -209,7 +209,7 @@ export class ArticleModel {
     }
 
     // 获取文章分类信息
-    public getCategoryData(uid: string) {
+    public getUserCategoryData(uid: string) {
         return this.connection.getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
                    .where('uid = :uid', {uid})
@@ -299,5 +299,20 @@ export class ArticleModel {
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();
+    }
+
+    public getQuickSearchDataList(keys: string, sonCategoryIds: number[]) {
+
+        console.log(501, sonCategoryIds);
+
+        return this.connection.getRepository(this.tableNoteArticle).find(
+            {
+                select: ['id', 'cid', 'title', 'description', 'lock', 'on_share', 'use_share_code', 'share_code', 'updateTime'],
+                where : [{cid: In(sonCategoryIds), disable: 0, title: Like(`%${keys}%`)}],
+                order : {
+                    id: "DESC"
+                }
+            }
+        )
     }
 }
