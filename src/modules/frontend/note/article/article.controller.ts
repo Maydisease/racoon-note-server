@@ -388,7 +388,7 @@ export class ArticleController {
 
         if (params.lock === 0) {
             params.password   = this.toolsService.getMD5(params.password);
-            userExistResponse = await this.userService.verifyUserValidity(req.userInfo.username, params.password);
+            userExistResponse = await this.userService.verifyUserIdentity(req.userInfo.username, params.password);
             if (!(userExistResponse && userExistResponse.length > 0)) {
                 return this.echoService.fail(1004, this.errorService.error.E1004);
             }
