@@ -72,9 +72,30 @@ export class ToolsService {
         return sourceStr;
     }
 
+    public htmlEncode(text) {
+
+        const getCharEntity = (ch) => {
+            const charEntities = {
+                "&"   : "&amp;",
+                "<"   : "&lt;",
+                ">"   : "&gt;",
+                "\x00": "&#0;",
+                "'"   : "&#39;",
+                '"'   : "&#34;",
+                "`"   : "&#96;"
+            };
+            return charEntities[ch] || (charEntities[ch] = "&#" + ch.charCodeAt(0) + ";");
+        };
+
+        const isHtml     = /[\x00`><\"'&]/;
+        const htmlEncode = /[\x00`><"'&]/g;
+        return text != null ? isHtml.test(text) && ("" + text).replace(htmlEncode, getCharEntity) || text : "";
+
+    };
+
     // 生成文章摘要
     public buildArticleDes(html: string, maxLength: number = 50): string {
-        let des         = html ? this.removeHtmlTag(html) : '';
+        let des = html ? this.removeHtmlTag(html) : '';
         return des.length > maxLength ? des.substring(0, maxLength) + '...' : des;
     }
 
@@ -125,7 +146,7 @@ export class ToolsService {
             case 'mix':
                 for (let i = 0; i < digit; i++) {
 
-                    const randomType = Math.floor(Math.random()*2);
+                    const randomType = Math.floor(Math.random() * 2);
 
                     switch (randomType) {
                         case 0:

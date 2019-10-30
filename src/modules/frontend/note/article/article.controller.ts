@@ -406,10 +406,12 @@ export class ArticleController {
         const params: any = this.toolsService.filterInvalidParams({
             disable: 0,
             lock   : 0,
-            keys   : String(body.keys),
+            keys   : String(this.toolsService.htmlEncode(body.keys)),
             type   : Number(body.type) === 0 ? 'title' : 'html_content',
             uid    : String(req.userInfo.userId),
         });
+
+        console.log(params);
 
         const sourceData = await Promise.all([
             this.articleService.getUserCategoryData(params.uid),
@@ -460,7 +462,7 @@ export class ArticleController {
     @Post('getQuickSearchDataList')
     public async getQuickSearchDataList(@Body() body: GetQuickSearchDataList, @Request() req) {
         const params: any = this.toolsService.filterInvalidParams({
-            keys: String(body.keys),
+            keys: String(this.toolsService.htmlEncode(body.keys)),
             cid : Number(body.cid),
             uid : String(req.userInfo.userId)
         });

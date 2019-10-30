@@ -1,7 +1,7 @@
 import {_NoteArticle}         from '../../../../entities/note.article.entity';
 import {_NoteCategory}        from '../../../../entities/note.category.entity';
 import {_User}                from '../../../../entities/user.entity';
-import {Connection, Like, In} from 'typeorm';
+import {Connection, Like, In, Binary} from 'typeorm';
 
 interface ArticleUpdateParams {
     title?: string;
@@ -230,6 +230,8 @@ export class ArticleModel {
 
         const order = {};
         order[type] = 'DESC';
+
+        console.log(where);
 
         return this.connection.getRepository(this.tableNoteArticle).find({where, order});
     }
