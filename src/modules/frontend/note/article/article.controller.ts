@@ -2,6 +2,7 @@ import * as MarkdownIt                           from 'markdown-it';
 import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 import {ArticleService}                          from './article.service';
 import * as moment                               from 'moment';
+import markdownItMermaid                         from '../../../../common/plugins/markdown_it/mermaid';
 import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
@@ -24,8 +25,7 @@ import 'prismjs/components/prism-textile';
 import 'prismjs/components/prism-dart';
 import 'prismjs/components/prism-yaml';
 
-const markdownItMermaid = require('markdown-it-mermaid').default;
-const markdownItImsize  = require('markdown-it-imsize');
+const markdownItImsize = require('markdown-it-imsize');
 
 declare var Prism: any;
 
