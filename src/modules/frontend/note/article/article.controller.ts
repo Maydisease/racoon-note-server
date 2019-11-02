@@ -3,6 +3,7 @@ import {Body, Controller, Inject, Post, Request} from '@nestjs/common';
 import {ArticleService}                          from './article.service';
 import * as moment                               from 'moment';
 import markdownItMermaid                         from '../../../../common/plugins/markdown_it/mermaid';
+import markdownItToDoList                        from '../../../../common/plugins/markdown_it/toDoList';
 import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
@@ -164,6 +165,7 @@ export class ArticleController {
             },
         })
             .use(markdownItMermaid)
+            .use(markdownItToDoList)
             .use(markdownItImsize);
     }
 
