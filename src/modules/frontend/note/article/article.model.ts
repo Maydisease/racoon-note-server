@@ -231,8 +231,6 @@ export class ArticleModel {
         const order = {};
         order[type] = 'DESC';
 
-        console.log(where);
-
         return this.connection.getRepository(this.tableNoteArticle).find({where, order});
     }
 

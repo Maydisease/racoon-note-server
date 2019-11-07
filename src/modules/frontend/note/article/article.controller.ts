@@ -312,8 +312,6 @@ export class ArticleController {
             return this.echoService.fail(1000, this.errorService.error.E1000);
         }
 
-        console.log(params);
-
         return this.echoService.success(response);
 
     }
@@ -413,8 +411,6 @@ export class ArticleController {
             uid    : String(req.userInfo.userId),
         });
 
-        console.log(params);
-
         const sourceData = await Promise.all([
             this.articleService.getUserCategoryData(params.uid),
             this.articleService.getSearchData(params.uid, params.keys, params.type, params.disable, params.lock),
@@ -475,7 +471,6 @@ export class ArticleController {
             const arr      = cid ? [cid] : [];
             const findLoop = ($cid: number) => {
                 userCategoryResponse.filter((item: any) => {
-                    console.log(item.id, $cid);
                     if (item.parent === $cid) {
                         arr.unshift(item.id);
                         findLoop(item.id);

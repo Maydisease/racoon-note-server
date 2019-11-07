@@ -12,7 +12,6 @@ export class ValidationPipe implements PipeTransform {
         console.log('管道');
         if (metadata.type === 'query') {
             try {
-                console.log('try', typeof value);
                 return JSON.parse(value);
             } catch (error) {
                 console.log('BadRequestException');

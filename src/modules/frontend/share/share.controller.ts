@@ -58,8 +58,6 @@ export class ShareController {
             // return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
-        console.log(551, codeObj.id, codeObj.uid, params.share_code);
-
         const serverBaseAddress = `http://${Conf.APP.APP_RUN_DOMAIN}`;
         const response: any     = await this.shareService.getSecretArticleData(codeObj.id, codeObj.uid, params.share_code);
 
