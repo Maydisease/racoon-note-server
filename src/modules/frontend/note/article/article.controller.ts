@@ -4,6 +4,7 @@ import {ArticleService}                          from './article.service';
 import * as moment                               from 'moment';
 import markdownItMermaid                         from '../../../../common/plugins/markdown_it/mermaid';
 import markdownItToDoList                        from '../../../../common/plugins/markdown_it/toDoList';
+import markdownItNtoBr                           from '../../../../common/plugins/markdown_it/nToBr';
 import {ToolsService}                            from '../../../../common/service/tools.service';
 import 'prismjs';
 import 'prismjs/components/prism-css';
@@ -164,6 +165,7 @@ export class ArticleController {
                 return html;
             },
         })
+            .use(markdownItNtoBr)
             .use(markdownItMermaid)
             .use(markdownItToDoList)
             .use(markdownItImsize);
