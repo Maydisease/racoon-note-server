@@ -71,7 +71,7 @@ export class UserModel {
 
     updateUserPassword(username: string, password: string, updateTime: number) {
 
-        const setBody: any = {
+        const updateBody: any = {
             password,
             updateTime,
         };
@@ -79,7 +79,7 @@ export class UserModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableUser)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('username = :username', {username})
                    .execute();
     }

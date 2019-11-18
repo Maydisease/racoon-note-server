@@ -133,6 +133,12 @@ interface GetQuickSearchDataList {
     keys: string;
 }
 
+interface MoveArticleToCategory {
+    type: number
+    aid: number
+    cid: number
+}
+
 @Controller('note')
 export class ArticleController {
 
@@ -241,7 +247,7 @@ export class ArticleController {
         }
 
         // 判断当前cid是否是有效的分类
-        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid)) {
+        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid, params.uid)) {
             return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
@@ -534,7 +540,7 @@ export class ArticleController {
             this.articleService.getTrashArticleDetail(params.id, params.uid),
         ]);
 
-        const categoryData       = sourceData[0];
+        const categoryData: any  = sourceData[0];
         const trashArticleDetail = sourceData[1];
 
         if (!trashArticleDetail || !categoryData) {
@@ -629,7 +635,7 @@ export class ArticleController {
         });
 
         // 判断当前需要恢复的文章的分类是否存在
-        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid)) {
+        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid, params.uid)) {
             return this.echoService.fail(1003, this.errorService.error.E1003);
         }
 
@@ -643,5 +649,36 @@ export class ArticleController {
         return this.echoService.success(response);
 
     }
+
+    // 文章拖拽分类
+    @Post('moveArticleToCategory')
+    async moveArticleToCategory(@Body() body: MoveArticleToCategory, @Request() req): Promise<object> {
+        const timestamp                     = new Date().getTime();
+        const params: ResetTrashArticleBody = this.toolsService.filterInvalidParams({
+            id        : Number(body.aid),
+            cid       : Number(body.cid),
+            uid       : String(req.userInfo.userId),
+            updateTime: timestamp,
+        });
+
+        // 判断当前id是否是有效的文章
+        if (!params.id || !params.uid || !await this.articleService.verifyArticleExist(params.id, params.uid)) {
+            return this.echoService.fail(1002, this.errorService.error.E1002);
+        }
+
+        // 判断当前cid是否是有效的分类
+        if (!params.cid || !await this.articleService.verifyCategoryExist(params.cid, params.uid)) {
+            return this.echoService.fail(1003, this.errorService.error.E1003);
+        }
+
+        const response: any = await this.articleService.moveArticleToCategory(params.id, params.cid, params.uid, params.updateTime);
+
+        // 判断数据是否正常插入到了article表
+        if (!(response && response.raw.changedRows > 0)) {
+            return this.echoService.fail(1000, this.errorService.error.E1000);
+        }
+
+        return this.echoService.success(response);
+    };
 
 }

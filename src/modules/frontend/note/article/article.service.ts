@@ -22,8 +22,8 @@ export class ArticleService {
     }
 
     // 验证当前分类是否存在
-    public async verifyCategoryExist(cid: number): Promise<boolean> {
-        return await new ArticleModel(this.connection).verifyCategoryExist(cid) >= 1;
+    public async verifyCategoryExist(cid: number, uid: string): Promise<boolean> {
+        return await new ArticleModel(this.connection).verifyCategoryExist(cid, uid) >= 1;
     }
 
     // 添加文章数据
@@ -104,5 +104,10 @@ export class ArticleService {
     // 快捷搜索 -> 搜索标题
     public getQuickSearchDataList(title: string, sonCategoryIds: number[]) {
         return new ArticleModel(this.connection).getQuickSearchDataList(title, sonCategoryIds);
+    }
+
+    // 移动文章到指定分类下
+    public moveArticleToCategory(aid: number, cid: number, uid: string, updateTime: number): Promise<object> {
+        return new ArticleModel(this.connection).moveArticleToCategory(aid, cid, uid, updateTime);
     }
 }

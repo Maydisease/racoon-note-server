@@ -12,7 +12,6 @@ export class LogsController {
     @UsePipes(new ValidationPipe())
     @Get('echo')
     async echoLogs(@Query() query) {
-        console.log('进来了...');
         return {}
     }
 

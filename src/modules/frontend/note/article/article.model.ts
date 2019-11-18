@@ -1,6 +1,6 @@
-import {_NoteArticle}         from '../../../../entities/note.article.entity';
-import {_NoteCategory}        from '../../../../entities/note.category.entity';
-import {_User}                from '../../../../entities/user.entity';
+import {_NoteArticle}                 from '../../../../entities/note.article.entity';
+import {_NoteCategory}                from '../../../../entities/note.category.entity';
+import {_User}                        from '../../../../entities/user.entity';
 import {Connection, Like, In, Binary} from 'typeorm';
 
 interface ArticleUpdateParams {
@@ -78,11 +78,12 @@ export class ArticleModel {
     }
 
     // 查询_NoteCategory表，是否存在当前用户对应的分类
-    verifyCategoryExist(cid: number) {
+    verifyCategoryExist(cid: number, uid: string) {
         return this.connection
                    .getRepository(this.tableNoteCategory)
                    .createQueryBuilder()
                    .where('id = :cid', {cid})
+                   .andWhere('uid = :uid', {uid})
                    .getCount();
     }
 
@@ -108,31 +109,31 @@ export class ArticleModel {
     // 更新文章数据到tableNoteArticle表
     updateArticleData(id: number, params: ArticleUpdateParams) {
 
-        const setBody: any = {
+        const updateBody: any = {
             uid       : params.uid,
             updateTime: params.updateTime,
         };
 
         if (params.title) {
-            setBody.title = params.title;
+            updateBody.title = params.title;
         }
 
         if (params.markdown_content) {
-            setBody.markdown_content = params.markdown_content;
+            updateBody.markdown_content = params.markdown_content;
         }
 
         if (params.markdown_content) {
-            setBody.html_content = params.html_content;
+            updateBody.html_content = params.html_content;
         }
 
         if (params.description) {
-            setBody.description = params.description;
+            updateBody.description = params.description;
         }
 
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .execute();
     }
@@ -140,30 +141,30 @@ export class ArticleModel {
     // 更新文章分享面板上的参数
     public updateArticleShareConf(id: number, params: any) {
 
-        const setBody: any = {
+        const updateBody: any = {
             uid       : params.uid,
             updateTime: params.updateTime
         };
 
         if (params.on_share === 0 || params.on_share === 1) {
-            setBody.on_share = params.on_share;
+            updateBody.on_share = params.on_share;
         }
 
         if (params.use_share_code === 0 || params.use_share_code === 1) {
-            setBody.use_share_code = params.use_share_code;
+            updateBody.use_share_code = params.use_share_code;
         }
 
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .execute();
     }
 
     // 跟新文章分享面板上的ShareCode
     public updateArticleShareCode(id: number, params: any) {
-        const setBody: any = {
+        const updateBody: any = {
             share_code: params.share_code,
             updateTime: params.updateTime
         };
@@ -171,14 +172,14 @@ export class ArticleModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .execute();
     }
 
     // 设置文章的禁用状态
     public setArticleDisableState(id: number, uid: string, disable: number, updateTime: number) {
-        const setBody: any = {
+        const updateBody: any = {
             disable,
             updateTime,
         };
@@ -186,7 +187,7 @@ export class ArticleModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();
@@ -194,7 +195,7 @@ export class ArticleModel {
 
     // 设置文章的锁定状态(分享)
     public setArticleLockState(id: number, uid: string, lock: number, updateTime: number) {
-        const setBody: any = {
+        const updateBody: any = {
             lock,
             updateTime,
         };
@@ -202,7 +203,7 @@ export class ArticleModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();
@@ -285,7 +286,7 @@ export class ArticleModel {
 
     // 重置垃圾箱中找不到分类的文章到tmp分类下
     public resetTrashArticleToTmpCategory(id: number, uid: string, cid: number, updateTime: number) {
-        const setBody: any = {
+        const updateBody: any = {
             cid       : cid,
             updateTime: updateTime,
             disable   : 0
@@ -294,7 +295,7 @@ export class ArticleModel {
         return this.connection
                    .createQueryBuilder()
                    .update(this.tableNoteArticle)
-                   .set(setBody)
+                   .set(updateBody)
                    .where('id = :id', {id})
                    .andWhere('uid = :uid', {uid})
                    .execute();
@@ -311,5 +312,21 @@ export class ArticleModel {
                 }
             }
         )
+    }
+
+    // 移动文章到指定分类下
+    public moveArticleToCategory(aid: number, cid: number, uid: string, updateTime: number) {
+        const updateBody: any = {
+            cid,
+            updateTime
+        };
+
+        return this.connection
+                   .createQueryBuilder()
+                   .update(this.tableNoteArticle)
+                   .set(updateBody)
+                   .where('id = :aid', {aid})
+                   .andWhere('uid = :uid', {uid})
+                   .execute();
     }
 }
