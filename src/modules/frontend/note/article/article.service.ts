@@ -110,4 +110,9 @@ export class ArticleService {
     public moveArticleToCategory(aid: number, cid: number, uid: string, updateTime: number): Promise<object> {
         return new ArticleModel(this.connection).moveArticleToCategory(aid, cid, uid, updateTime);
     }
+
+    // 拉取用户所有未缓存过的数据
+    public getUserAllArticle(ids: number[], uid: string, disable: number) {
+        return new ArticleModel(this.connection).getUserAllArticle(ids, uid, disable);
+    }
 }

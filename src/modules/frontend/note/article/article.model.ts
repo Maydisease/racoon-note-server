@@ -1,7 +1,7 @@
-import {_NoteArticle}                 from '../../../../entities/note.article.entity';
-import {_NoteCategory}                from '../../../../entities/note.category.entity';
-import {_User}                        from '../../../../entities/user.entity';
-import {Connection, Like, In, Binary} from 'typeorm';
+import {_NoteArticle}                      from '../../../../entities/note.article.entity';
+import {_NoteCategory}                     from '../../../../entities/note.category.entity';
+import {_User}                             from '../../../../entities/user.entity';
+import {Connection, Like, In, Not, Binary} from 'typeorm';
 
 interface ArticleUpdateParams {
     title?: string;
@@ -328,5 +328,26 @@ export class ArticleModel {
                    .where('id = :aid', {aid})
                    .andWhere('uid = :uid', {uid})
                    .execute();
+    }
+
+    public getUserAllArticle(ids: number[], uid: string, disable: number) {
+
+        let idExpression: any = {};
+
+        if (ids.length > 0) {
+            idExpression = {id: Not(In(ids))};
+        }
+
+        return this.connection.getRepository(this.tableNoteArticle).find(
+            {
+                where: [
+                    {
+                        ...idExpression,
+                        uid,
+                        disable
+                    }
+                ]
+            }
+        );
     }
 }

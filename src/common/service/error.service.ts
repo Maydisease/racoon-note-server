@@ -30,6 +30,7 @@ enum EMessage {
     'E1026' = 'Currently this category is super category and cannot be deleted.',
     'E1027' = 'Currently this category is super category and cannot be created son category.',
     'E1028' = 'This user\'s super tmp category does not exist.',
+    'E1029' = 'Article ids parameter does not exist.'
 }
 
 @Injectable()

@@ -139,6 +139,12 @@ interface MoveArticleToCategory {
     cid: number
 }
 
+interface GetUserAllArticle {
+    disable: number
+    uid: string
+    ids: number[]
+}
+
 @Controller('note')
 export class ArticleController {
 
@@ -679,6 +685,28 @@ export class ArticleController {
         }
 
         return this.echoService.success(response);
+    };
+
+    // 拉取当前用户所有文章
+    @Post('getUserAllArticle')
+    async getUserAllArticle(@Body() body: GetUserAllArticle, @Request() req): Promise<object> {
+        const params: GetUserAllArticle = this.toolsService.filterInvalidParams({
+            ids    : body.ids,
+            disable: 0,
+            uid    : String(req.userInfo.userId),
+        });
+
+        if (!(params.ids && typeof params.ids === 'object' && params.ids.length >= 0)) {
+            return this.echoService.fail(1029, this.errorService.error.E1029);
+        }
+
+        const response: any = await this.articleService.getUserAllArticle(params.ids, params.uid, params.disable);
+        let articleList     = [];
+        if (response.length > 0) {
+            articleList = response;
+        }
+
+        return this.echoService.success(articleList);
     };
 
 }
