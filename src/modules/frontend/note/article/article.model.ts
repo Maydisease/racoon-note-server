@@ -61,7 +61,7 @@ export class ArticleModel {
                 select: ['id', 'cid', 'title', 'description', 'lock', 'on_share', 'use_share_code', 'share_code', 'updateTime'],
                 where : [{cid, uid, disable}],
                 order : {
-                    id: "DESC"
+                    updateTime: "DESC"
                 }
             }
         );
