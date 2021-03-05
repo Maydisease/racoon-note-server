@@ -18,8 +18,8 @@ switch (process.env.APP_ENV) {
   case 'production':
     projectSrcPath = path.join(__dirname, '../../../src/');
     staticsPath = path.join(__dirname, '../../../statics/');
-    privateKeyPath = path.join(__dirname, '../../../keys/note_key');
-    publicKeyPath = path.join(__dirname, '../../../keys/note_key.pub');
+    privateKeyPath = path.join(__dirname, '../../../env/keys/note_key');
+    publicKeyPath = path.join(__dirname, '../../../env/keys/note_key.pub');
     attachedFilesPath = path.join(__dirname, '../../../attached_files/');
     break;
 }
