@@ -1,70 +1,81 @@
 import {CanActivate, ExecutionContext, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
-import {UserService}                                                                  from '../modules/frontend/user/user.service';
+import {UserService} from '../modules/frontend/user/user.service';
 
 @Injectable()
 export class UserLoginOAuthGuard implements CanActivate {
 
-    public whileList: string[];
-    public onWhileList: boolean;
-    public userService: UserService;
+	public whileList: string[];
+	public onWhileList: boolean;
+	public userService: UserService;
 
-    constructor(
-        @Inject('toolsService') public toolsService,
-        @Inject('errorService') public errorService,
-    ) {
-        this.onWhileList = true;
-        this.userService = new UserService();
-        this.whileList   = ['/user', '/logs', '/mail', '/share'];
-    }
+	constructor(
+		@Inject('toolsService') public toolsService,
+		@Inject('errorService') public errorService
+	) {
+		this.onWhileList = true;
+		this.userService = new UserService();
+		this.whileList = ['/user', '/logs', '/mail', '/share'];
+	}
 
-    async canActivate(
-        context: ExecutionContext,
-    ): Promise<boolean> {
+	public echoTokenError() {
+		throw new HttpException({
+			status: HttpStatus.FORBIDDEN,
+			error: this.errorService.error.E1015
+		}, 1015);
+	}
 
-        console.log('守卫');
+	async canActivate(
+		context: ExecutionContext
+	): Promise<boolean> {
 
-        let isLoginState = false;
-        const headers    = context.switchToHttp().getRequest().headers;
+		let isLoginState = false;
+		const headers = context.switchToHttp().getRequest().headers;
 
-        if (this.onWhileList) {
+		if (this.onWhileList) {
 
-            this.whileList.some((item: string): any => {
-                item               = item.toLowerCase();
-                const path: string = context.switchToHttp().getRequest().path.toLowerCase();
+			this.whileList.some((item: string): any => {
+				item = item.toLowerCase();
+				const path: string = context.switchToHttp().getRequest().path.toLowerCase();
 
-                if (path === '/' || path.indexOf(item) === 0) {
-                    isLoginState = true;
-                }
-            });
-        }
+				if (path === '/' || path.indexOf(item) === 0) {
+					isLoginState = true;
+				}
+			});
+		}
 
-        if (!isLoginState) {
-            try {
+		if (!isLoginState) {
 
-                const userParams = this.toolsService.decodeUserToken(headers['auth-token']);
-                const params     = this.toolsService.filterInvalidParams({
-                    username : String(userParams.username),
-                    userId   : String(userParams.userId),
-                    password : String(userParams.password),
-                    inputTime: Number(userParams.inputTime),
-                });
+			// 如果缺少token参数，那么抛出Token无效
+			if (!headers['auth-token']) {
+				isLoginState = false;
+				this.echoTokenError();
+			}
 
-                context.switchToHttp().getRequest()['userInfo'] = params;
+			try {
 
-                isLoginState = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
+				// 将token解码，获取以下参数.
+				const userParams = this.toolsService.decodeUserToken(headers['auth-token']);
+				const params = this.toolsService.filterInvalidParams({
+					username: String(userParams.username),
+					userId: String(userParams.userId),
+					password: String(userParams.password),
+					inputTime: Number(userParams.inputTime)
+				});
 
-            } catch (e) {
-                isLoginState = false;
-            }
-        }
+				context.switchToHttp().getRequest()['userInfo'] = params;
+				isLoginState = await this.userService.verifySignState(params.username, params.userId, params.password, params.inputTime);
 
-        if (!isLoginState) {
-            throw new HttpException({
-                status: HttpStatus.FORBIDDEN,
-                error : this.errorService.error.E1015,
-            }, 1015);
-        }
+			} catch (e) {
+				isLoginState = false;
+			}
 
-        return isLoginState;
-    }
+			// 抛出Token无效
+			if (!isLoginState) {
+				this.echoTokenError();
+			}
+
+		}
+
+		return isLoginState;
+	}
 }

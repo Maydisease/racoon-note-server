@@ -84,10 +84,8 @@ export class LinkController {
 
 		let response = await this.linkService.getLinkList(params.uid);
 
-		console.log(1000, response);
-
 		if (!(response && response.length > 0)) {
-			return;
+			return this.echoService.success([]);
 		}
 
 		return this.echoService.success(response);
