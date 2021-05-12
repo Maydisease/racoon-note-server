@@ -4070,10 +4070,10 @@ node-sass@^4.3.0:
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
 
-nodemailer@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.npm.taobao.org/nodemailer/download/nodemailer-5.1.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnodemailer%2Fdownload%2Fnodemailer-5.1.1.tgz#0c48d1ecab02e86d9ff6c620ee75ed944b763505"
-  integrity sha1-DEjR7KsC6G2f9sYg7nXtlEt2NQU=
+nodemailer@^6.4.16:
+  version "6.4.16"
+  resolved "https://registry.nlark.com/nodemailer/download/nodemailer-6.4.16.tgz#5cb6391b1d79ab7eff32d6f9f48366b5a7117293"
+  integrity sha1-XLY5Gx15q37/Mtb59INmtacRcpM=
 
 nodemon@^1.18.3:
   version "1.19.4"
