@@ -117,4 +117,14 @@ export class LinkModel {
 	}
 
 
+	verifyLinkForTagIsExist(linkId: number, uid: string) {
+		return this.connection
+		           .getRepository(this.tableLinkTagLink)
+		           .createQueryBuilder()
+		           .where('linkId = :linkId', {linkId})
+		           .andWhere('uid = :uid', {uid})
+		           .getCount();
+	}
+
+
 }

@@ -32,6 +32,10 @@ export class LinkService {
 		return await new LinkModel(this.connection).verifyLinkExist(linkId, uid) >= 1;
 	}
 
+	public async verifyLinkForTagIsExist(linkId: number, uid: string){
+		return await new LinkModel(this.connection).verifyLinkForTagIsExist(linkId, uid) >= 1;
+	}
+
 	public updateLink(linkId: number, title: string, url: string, summary: string, updateTime: number, uid: string): Promise<any> {
 		return new LinkModel(this.connection).updateLink(linkId, title, url, summary, updateTime, uid);
 	}

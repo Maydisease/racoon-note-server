@@ -12,9 +12,13 @@ export class TagService {
 	}
 
 	// 更新文章数据
-
 	public addLink(params) {
 		return new TagModel(this.connection).addLink(params);
+	}
+
+	// 获取所有标签
+	public getAllTag(uid: string) {
+		return new TagModel(this.connection).getAllTag(uid);
 	}
 
 	public verifyTagIsExist(uid: string, tag: string) {

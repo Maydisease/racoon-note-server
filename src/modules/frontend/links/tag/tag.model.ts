@@ -37,6 +37,13 @@ export class TagModel {
 	}
 
 	// 获取文章列表
+	getAllTag(uid: string): Promise<GetLinkListModal | unknown[]> {
+		return this.connection.createQueryBuilder(this.tableLinkTag, 'tag')
+		           .where('tag.uid = :uid', {uid})
+		           .getMany();
+	}
+
+	// 获取文章列表
 	verifyTagIsExist(uid: string, tag: string) {
 		console.log('model:', tag);
 		return this.connection

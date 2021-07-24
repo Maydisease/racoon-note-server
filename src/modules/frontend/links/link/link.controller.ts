@@ -97,6 +97,7 @@ export class LinkController {
 
 		const linkUpdateTime = new Date().getTime();
 		const linkInputTime = new Date().getTime();
+		let isExistNewTag = false;
 
 		const params: AddLinkParams = this.toolsService.filterInvalidParams({
 			uid: String(req.userInfo.userId),
@@ -168,6 +169,8 @@ export class LinkController {
 
 			if (tagNotExistList && tagNotExistList.length > 0) {
 
+				console.log('tagNotExistList::', tagNotExistList);
+
 				// 添加多个标签.
 				const insertTagResponseMap = await this.tagService.addMultipleTag(tagNotExistList);
 
@@ -184,10 +187,13 @@ export class LinkController {
 						linkId: linkId,
 						updateTime: new Date().getTime(),
 						inputTime: new Date().getTime()
-					}))
+					}));
+					isExistNewTag = true;
 				}
 
 			}
+
+			console.log('readyToAddTagList:', readyToAddTagList);
 
 			// 移除所有之前的link关联tag的数据.
 			await this.tagService.removeMultipleTagForLink(linkId, params.uid);
@@ -197,6 +203,7 @@ export class LinkController {
 
 		const echoBody = {
 			id: params.cid,
+			isExistNewTag: isExistNewTag,
 			links: [
 				{
 					cid: params.cid,
@@ -218,6 +225,7 @@ export class LinkController {
 	@Post('updateLink')
 	async updateLink(@Body() body, @Request() req) {
 		const linkUpdateTime = new Date().getTime();
+		let isExistNewTag = false;
 
 		const params: UpdateLinkParams = this.toolsService.filterInvalidParams({
 			linkId: Number(body.linkId),
@@ -260,7 +268,12 @@ export class LinkController {
 		const tagNotExistList = [];
 		let existTagResponseList = [];
 
-		console.log('params.tags:::', params.tags);
+
+		// 编辑时，如果删除了所有标签的话，那么就清理当前文章的所有标签绑定关系
+		if (!(params.tags && params.tags.length > 0)) {
+			const linkExistLinkForTag = await this.linkService.verifyLinkForTagIsExist(params.linkId, params.uid);
+			linkExistLinkForTag && await this.tagService.removeMultipleTagForLink(params.linkId, params.uid);
+		}
 
 		// 如果存在标签的话
 		if (params.tags && params.tags.length > 0) {
@@ -294,6 +307,8 @@ export class LinkController {
 
 			if (tagNotExistList && tagNotExistList.length > 0) {
 
+				console.log(666011111, tagNotExistList);
+
 				// 添加多个标签.
 				const insertTagResponseMap = await this.tagService.addMultipleTag(tagNotExistList);
 
@@ -310,10 +325,14 @@ export class LinkController {
 						linkId: params.linkId,
 						updateTime: new Date().getTime(),
 						inputTime: new Date().getTime()
-					}))
+					}));
+
+					isExistNewTag = true;
 				}
 
 			}
+
+			console.log('readyToAddTagList:', params.linkId, params.uid, readyToAddTagList);
 
 			// 移除所有之前的link关联tag的数据.
 			await this.tagService.removeMultipleTagForLink(params.linkId, params.uid);
@@ -323,6 +342,7 @@ export class LinkController {
 
 		const echoBody = {
 			id: params.cid,
+			isExistNewTag: isExistNewTag,
 			links: [
 				{
 					cid: params.cid,
@@ -339,6 +359,21 @@ export class LinkController {
 
 		return this.echoService.success(echoBody);
 
+	}
+
+	@Post('getAllTag')
+	async getAllTag(@Body() body, @Request() req) {
+		const params: GetLinkList = this.toolsService.filterInvalidParams({
+			uid: String(req.userInfo.userId)
+		});
+
+		let response = await this.tagService.getAllTag(params.uid);
+
+		if (!(response && response.length > 0)) {
+			return this.echoService.success([]);
+		}
+
+		return this.echoService.success(response);
 	}
 
 }
