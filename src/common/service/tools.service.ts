@@ -8,7 +8,7 @@ export class ToolsService {
     // 过滤无用参数
     public filterInvalidParams(params: any): any {
         for (const key in params) {
-            if (params[key] === undefined || params[key] === 'undefined' || params[key] === null || params[key] === '') {
+            if (params[key] === undefined || params[key] === 'undefined' || params[key] === null) {
                 delete params[key];
             }
         }

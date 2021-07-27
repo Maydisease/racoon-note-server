@@ -227,6 +227,8 @@ export class LinkController {
 		const linkUpdateTime = new Date().getTime();
 		let isExistNewTag = false;
 
+		console.log('body::', body);
+
 		const params: UpdateLinkParams = this.toolsService.filterInvalidParams({
 			linkId: Number(body.linkId),
 			cid: Number(body.cid),
@@ -237,6 +239,8 @@ export class LinkController {
 			tags: body.tags || [],
 			updateTime: linkUpdateTime
 		});
+
+		console.log('params:', params);
 
 		// 缺少linkId参数
 		if (!params.linkId) {

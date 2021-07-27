@@ -68,15 +68,11 @@ export class LinkModel {
 	// 更新link
 	updateLink(linkId: number, title: string, url: string, summary: string, updateTime: number, uid: string) {
 
-
 		const body: UpdateLinkBody = {
 			title,
 			url,
-			updateTime
-		}
-
-		if (summary) {
-			body.summary = summary;
+			updateTime,
+			summary
 		}
 
 		return this.connection
