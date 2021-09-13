@@ -12,6 +12,6 @@
             "pid_file": "./logs/note-server.wunao.net.pid",
             "watch": false,
             "mode": "cluster",
-            "instances": 4
+            "instances": 1
     }
 }
