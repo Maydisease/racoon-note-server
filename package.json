@@ -29,7 +29,7 @@
 		"@types/node-sass-middleware": "^0.0.31",
 		"dotenv": "^6.2.0",
 		"hbs": "^4.0.4",
-		"markdown-it": "^8.4.2",
+		"markdown-it": "^12.3.2",
 		"moment": "^2.24.0",
 		"mysql": "^2.16.0",
 		"node-sass-middleware": "^0.11.0",
